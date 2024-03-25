@@ -37,7 +37,6 @@ function playaud(base64Content, contentType) {
                 base64String = "data:" + albumImg.format + ";base64," + arrayBufferToBase64(albumImg.data);
             }
             const e2 = gen(7);
-            const e3 = gen(7);
             const e5 = gen(7);
             const e7 = gen(7);
             const e8 = gen(7);
@@ -46,28 +45,67 @@ function playaud(base64Content, contentType) {
             }
             if (isMobileDevice()) {
                 var audPlayer = `
-                <div style="position: fixed; left: 18vw; right: 18vw; top: 18vw; z-index: 2; overflow-y: auto !important;">
-                    <img src="${base64String}" style="box-shadow: -1vw 0 1vw -1vw rgba(0, 0, 0, 0.25), 1.2vw 0 1.2vw -1.2vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
-                    width: 90%; top: 2vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));">
+                <div style="position: fixed; left: 12vw; right: 12vw; top: 14vw; z-index: 2; overflow-y: auto !important;">
+                    <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
+                    width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));">
                     <p class="med">${wint}</p>
                     <p class="med">${nm}</p>
                     <p class="med">${alb} - ${yr}</p>
                     <p class="smt">Progress: <input type="range" id="${e5}" min="0" max="100" value="0"></p>
-                    <p class="smt">Volume: <input type="range" id="${e3}" min="0" max="100" value="100"></p>
                     <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
                 </div>`;
             } else {
                 var audPlayer = `
                 <div style="margin-top: 20px;">
-                    <img src="${base64String}" style="box-shadow: -1vw 0 1vw -1vw rgba(0, 0, 0, 0.25), 1.2vw 0 1.2vw -1.2vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
+                    <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
                     width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));">
                     <p class="med">${wint}</p>
                     <p class="med">${nm}</p>
                     <p class="med">${alb} - ${yr}</p>
                     <p class="smt">Progress: <input type="range" id="${e5}" min="0" max="100" value="0"></p>
-                    <p class="smt">Volume: <input type="range" id="${e3}" min="0" max="100" value="100"></p>
                     <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
                 </div>`;
+            }
+            if ("mediaSession" in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: tag.tags.title,
+                    artist: tag.tags.artist,
+                    album: tag.tags.album,
+                    artwork: [
+                        {
+                            src: base64String,
+                            sizes: "512x512",
+                            type: "image/png",
+                        },
+                    ],
+                });
+                navigator.mediaSession.setActionHandler("play", () => {
+                    audio.play();
+                });
+                navigator.mediaSession.setActionHandler("pause", () => {
+                    audio.pause();
+                });
+                navigator.mediaSession.setActionHandler("stop", () => {
+                    audio.pause();
+                    URL.revokeObjectURL(blob);
+                    blob = null;
+                    isPaused = false;
+                    pauseBtn.src = './assets/img/circle-pause.svg';
+                    cv('covsc', '1.0');
+                    clapp('media');
+                });
+                navigator.mediaSession.setActionHandler("previoustrack", () => {
+                    audio.pause();
+                    URL.revokeObjectURL(blob);
+                    blob = null;
+                    back();
+                });
+                navigator.mediaSession.setActionHandler("nexttrack", () => {
+                    audio.pause();
+                    URL.revokeObjectURL(blob);
+                    blob = null;
+                    skip();
+                });
             }
             showf('media');
             document.getElementById('media2').innerHTML = audPlayer;
@@ -76,7 +114,6 @@ function playaud(base64Content, contentType) {
             audio.type = contentType;
             audio.play();
             const pauseBtn = document.getElementById(e2);
-            const volumeSlider = document.getElementById(e3);
             const closeBtn = document.getElementById('killsong');
             const scrubber = document.getElementById(e5);
             const loopBtn = document.getElementById('loopbtn');
@@ -101,15 +138,13 @@ function playaud(base64Content, contentType) {
                 }
             });
 
-
-            volumeSlider.addEventListener('input', function () {
-                audio.volume = parseFloat(this.value) / 100;
-            });
-
             closeBtn.addEventListener('click', function () {
                 audio.pause();
                 URL.revokeObjectURL(blob);
                 blob = null;
+                isPaused = false;
+                pauseBtn.src = './assets/img/circle-pause.svg';
+                cv('covsc', '1.0');
                 clapp('media');
             });
 
@@ -123,6 +158,17 @@ function playaud(base64Content, contentType) {
                 audio.pause();
                 URL.revokeObjectURL(blob);
                 blob = null;
+            });
+
+            audio.addEventListener('pause', function () {
+                isPaused = true;
+                pauseBtn.src = './assets/img/circle-play.svg';
+                cv('covsc', '0.8');
+            });
+            audio.addEventListener('play', function () {
+                isPaused = false;
+                pauseBtn.src = './assets/img/circle-pause.svg';
+                cv('covsc', '1.0');
             });
 
             scrubber.addEventListener('input', function () {
@@ -143,6 +189,7 @@ function playaud(base64Content, contentType) {
                 audio.loop = loopEnabled;
                 loopBtn.textContent = `Loop: ${loopEnabled ? 'On' : 'Off'}`;
             });
+
         },
         onError: function (error) {
             console.error("Error reading metadata:", error);

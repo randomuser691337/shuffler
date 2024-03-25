@@ -2,13 +2,13 @@
     --background: #fff;
     --accent: 40, 70, 235;
     --lightdark: #fff;
-    --lightdarkb: #d4d4d4;
+    --lightdarkb: #dfdfdf;
     --bordercolor: #dfdfdf;
     --rad1: 14px;
     --rad2: 9px;
-    --fz1: 16px;
-    --fz2: 14px;
-    --fz3: 12px;
+    --fz1: 18px;
+    --fz2: 16px;
+    --fz3: 14px;
     --fontc: #000;
     --fontc2: #333;
     --slbl: blur(4px);
@@ -157,9 +157,9 @@ input:placeholder {
     cursor: pointer;
     border: none !important;
     filter: var(--isat);
-    width: 48px;
+    width: 54px;
     margin-left: 2px; margin-right: 2px;
-    height: 48px;
+    height: 54px;
 }
 
 .icon:hover {

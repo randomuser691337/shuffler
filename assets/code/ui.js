@@ -201,7 +201,7 @@ async function appear(mode) {
     if (mode === "l") {
         changevar('background', '#fff');
         changevar('lightdark', '#fff');
-        changevar('lightdarkb', '#d4d4d4');
+        changevar('lightdarkb', '#dfdfdf');
         changevar('fontc', '#000');
         changevar('fontc2', "#333");
         changevar('bordercolor', "#DFDFDF");

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shuffler</title>
+    <link rel="shortcut icon" href="./assets/img/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="./assets/img/noround.png">
+    <link rel="stylesheet" href="./assets/core.css">
+    <link rel="stylesheet" href="./assets/browser.css">
+    <link rel="apple-touch-icon" href="./assets/img/favicon.png">
+    <script>
+        var ver = "0.0.1";
+        var lastedit = "Mar 24, 2024";
+        var crashed = false;
+        var mostrecerr = "No history."
+        var forcedatac = true;
+        var locked = false;
+        var abs = true;
+        var gfx = true;
+        var wcur = true;
+        var dispo = false;
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+        async function panic(cont) {
+            if (crashed === false) {
+                await delvar('bootload');
+                await send(`Panic: ${cont}`);
+                await writevar('panic', cont);
+            } else {
+                console.log('<!> Already panicking!');
+            }
+        }
+        console.log(`%c /\\_/\\  Shuffler ${ver}
+%c( o.o ) Edited ${lastedit}
+%c > ^ <  randomuser691337`, 'color: orange', 'color: orange', 'color: orange');
+
+        console.log(`<!> Do not paste anything here, as doing so may allow anyone full access to this Shuffler.`);
+    </script>
+</head>
+
+<body>
+    <div class="fullbg" id="lockthing"></div>
+    <script>
+        document.addEventListener("click", function (e) {
+            let t = e.target;
+            if (t.id === "lockthing") {
+                t.clickCount = (t.clickCount || 0) + 1;
+                if (t.clickCount === 1) {
+                    t.timeoutID = setTimeout(() => {
+                        t.clickCount = 0;
+                    }, 1500);
+                }
+                if (t.clickCount === 2) {
+                    clearTimeout(t.timeoutID);
+                    lock();
+                    t.clickCount = 0;
+                }
+            }
+        });
+    </script>
+    <div id="nest">
+        <div id="loading"
+            style="position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 9999; background-color: #000;">
+
+        </div>
+        <p class="h2 hide" style="margin-top: 12px;" id="sandwarn">Sandbox Desktop</p>
+        <div id="setupbg" onmousedown="unlock('setupbg');">
+            <div id="sorryapple">
+                <svg id="hellosvg" viewBox="0 0 1230.94 414.57">
+                    <path
+                        d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31"
+                        transform="translate(311.08 476.02)"
+                        style="fill:none;stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:35px" />
+                </svg>
+                <p class="med"
+                    style="font-size: 15px; margin-top: 8px; color: #fff; margin-top: 8px; animation: fucker 4.3s;">
+                    Press to open</p>
+            </div>
+        </div>
+        <!--Settings-->
+        <script>
+            function imsosilly() {
+                fesw('settingsmain', 'settingsuser');
+            }
+        </script>
+        <div class="window" id="settings" name="Settings">
+            <div class="content">
+                <p class="h2">Settings</p>
+                <div id="settingsmain">
+                    <button class="b1 b2" onclick="fesw('settingsmain', 'settingsappear');">Appearance</button><button
+                        class="b1 b2" onclick="fesw('settingsmain', 'settingspriv');">Data & Privacy</button><button
+                        class="b1 b2" onclick="fesw('settingsmain', 'settingsgen');">General</button>
+                </div>
+                <div id="settingsuser" style="display: none;">
+                    <p style="margin: 0px !important;" class="bold">Username / Password</p>
+                    <button class="b1 b2" onclick="nameutil(`<p>Enter new username</p>`);">Change
+                        username</button><button class="b1 b2"
+                        onclick="passutil('<p>Enter new password, WebDesk may freeze for a bit.</p><p>Do not reload WebDesk until it unfreezes, or you will lose all data.</p>');">Change
+                        pass</button>
+                    <p>Other</p>
+                    <p><button class="winb" onclick="fesw('settingsuser', 'settingsmain');">Back</button></p>
+                </div>
+                <div id="settingsappear" style="display: none;">
+                    <p class="bold" style="margin: 0px !important;">Accent / Appearance</p>
+                    <button class="acb" style="background: rgb(210, 30, 30);" onclick="chacc('210, 30, 30');"></button>
+                    <button class="acb" style="background: rgb(210, 120, 30);"
+                        onclick="chacc('210, 120, 30');"></button>
+                    <button class="acb" style="background: rgb(210, 180, 20);"
+                        onclick="chacc('210, 180, 20');"></button>
+                    <button class="acb" style="background: rgb(50, 160, 20);" onclick="chacc('50, 160, 20');"></button>
+                    <button class="acb" style="background: rgb(40, 70, 235);" onclick="chacc('40, 70, 235');"></button>
+                    <button class="acb" style="background: rgb(120, 60, 235);"
+                        onclick="chacc('120, 60, 235');"></button>
+                    <button class="acb" style="background: rgb(180, 180, 180);"
+                        onclick="chacc('200, 200, 200');"></button>
+                    <p><button class="b1 light" onclick="appear('l');">Light</button><button style="margin-left: 3px;"
+                            class="b1 dark" onclick="appear();">Dark</button></p>
+                    <p>Other</p>
+                    <p><button class="winb" onclick="fesw('settingsappear', 'settingsui');opapp('settings');">UI
+                            settings</button><button class="winb"
+                            onclick="fesw('settingsappear', 'settingsaccent');">Custom accent</button><button
+                            class="winb" onclick="fesw('settingsappear', 'settingsmain');">Back</button></p>
+                </div>
+                <div id="settingsaccent" style="display: none;">
+                    <p class="bold">Custom accent</p>
+                    <p>Enter RGB code for example: 180, 180, 180</p>
+                    <input class="i1" id="customcolor" placeholder="RGB here" /><button class="b1"
+                        onclick="chacc2('customcolor');">Confirm!</button><button class="b1"
+                        onclick="fesw('settingsaccent', 'settingsappear');">Back</button>
+                </div>
+                <div id="settingspriv" style="display: none;">
+                    <p class="bold">Data & Privacy</p>
+                    <button class="b1" onclick="fesw('settingspriv', 'eraseareyousure')">Erase This Shuffler</button>
+                    <p><button class="winb" onclick="fesw('settingspriv', 'settingsmain');">Back</button></p>
+                </div>
+                <div id="eraseareyousure" style="display: none;">
+                    <p class="bold">Are you sure you want to erase this Shuffler?</p>
+                    <p>All your settings, songs, and weather info will be deleted forever!</p>
+                    <button class="b1 b2" onclick="burnitall('justreload');">Yes, I am sure</button>
+                    <button class="b1 b2" onclick="fesw('eraseareyousure', 'settingspriv');">Take me back!</button>
+                </div>
+                <div id="settingsgen" style="display: none;">
+                    <p class="bold">General</p>
+                    <button class="b1 b2" onclick="fesw('settingsgen', 'settingsui');opapp('settings');">Change UI
+                        settings</button>
+                    <button class="b1 b2 guestno" onclick="fesw('settingsgen', 'settingslock');">Lock
+                        timeout</button>
+                    <p><button class="winb" onclick="fesw('settingsgen', 'settingsmain');">Back</button></p>
+                </div>
+                <div id="settingsui" style="display: none;">
+                    <p class="bold">UI settings</p>
+                    <p>Button sound effects</p>
+                    <p class="smt">Sound effects when using a button. Disable on Safari.</p>
+                    <button class="b3 green"
+                        onclick="writepb('b','t');abs=true;snack('Saved button settings.', '2500');">Enable
+                        (default)</button><button class="b3 red"
+                        onclick="writepb('b','f');abs=false;snack('Saved button settings.', '2500');">Disable</button>
+                    <p>Window tinting</p>
+                    <p class="smt">Adds a slight accent to app backgrounds. Disable on low-end devices.</p>
+                    <button class="b3 green"
+                        onclick="writepb('wb','t');cv('winc', 'rgba(var(--accent), 0.08)');snack('Saved window settings.', '2500');">Enable
+                        (default)</button><button class="b3 red"
+                        onclick="writepb('wb','f');cv('winc', 'transparent');snack('Saved window settings.', '2500');">Disable</button>
+                    <p><button class="winb" onclick="fesw('settingsui', 'settingsgen');">Back</button></p>
+                </div>
+                <div id="settingslock" style="display: none;">
+                    <p class="bold">Lock Timeout</p>
+                    <p class="smt">The amount of time before Shuffler auto-locks.</p>
+                    <button class="b1 b2" onclick="timeoutChange(20000)">20 seconds</button><button class="b1 b2"
+                        onclick="timeoutChange(60000)">1 minute</button><button class="b1 b2"
+                        onclick="timeoutChange(300000)">5 minutes</button><button class="b1 b2"
+                        onclick="timeoutChange(600000)">10 minutes</button><button class="b1 b2"
+                        onclick="timeoutChange(900000)">15 minutes</button><button class="b1 b2"
+                        onclick="timeoutChange(1200000)">20 minutes</button>
+                    <p><button class="winb" onclick="fesw('settingslock', 'settingsgen');">Back</button></p>
+                </div>
+            </div>
+            <div class="close" id="closes1">
+                <button class="b1" onclick="clapp('settings');">Close</button>
+            </div>
+            <div class="close hide" id="closes2">
+                <button class="b1" onclick="fesw('settings', 'media');">Back</button>
+            </div>
+        </div>
+        <div id="weather" class="window resizeh" name="Weather">
+            <div class="content" id="weathers1">
+                <p>1. Input your city first.</p>
+                <input id="weathercity" placeholder="Enter a city here" class="i1">
+                <p>2. Select the unit you use.</p>
+                <button class="b1" onclick="getWeather('weathercity', 'imperial');">Fahrenheit</button><button
+                    class="b1" onclick="getWeather('weathercity', 'metric');">Celsius</button>
+            </div>
+            <div class="content" id="weathers2" style="display: none;">
+                <p class="weathera"></p>
+                <button class="b1" onclick="fesw('weathers2', 'weathers1');">Reconfigure</button>
+            </div>
+            <div class="close">
+                <button class="b1" onclick="clapp('weather');">Close</button>
+            </div>
+        </div>
+        <div class="window" id="media" name="Media">
+            <div class="content" id="media2"></div>
+            <div class="close">
+                <button class="b1" id="killsong">Stop</button><button class="b1"
+                    onclick="fesw('media', 'settings');fesw('closes1', 'closes2');">Settings</button>
+            </div>
+        </div>
+        <div class="window" id="about" name="About"
+            style="width: 300px !important; height: auto !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%); right: unset !important; bottom: unset !important; border-radius: 12px; box-shadow: var(--wins); border: 2px solid var(--bordercolor);">
+            <div class="content" style="padding: 8px;">
+                <div class="container" id="about1">
+                    <div class="logo">
+                        <img style="width: 100%; box-sizing: border-box; height: auto; border-radius: 10px;"
+                            src="./assets/img/noround.png">
+                        <p>Ver: <span class="ver med">one sec</span></p>
+                    </div>
+                    <div class="info">
+                        <p>Last edit: <span class="lastedit med">one sec</span></p>
+                        <p class="usage-text">One sec...</p>
+                        <div class="progress-bar">
+                            <div class="progress struse"></div>
+                        </div>
+                        <button class="winb" onclick="hidef('about');" style="margin-top: 3px;">Close</button><button
+                            class="winb" onclick="fesw('about', 'settings');" style="margin-top: 3px;">Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End of settings-->
+        <div id="mainmenu" style="display: block;">
+            <div class="content">
+            <div style="position: sticky;">
+                <p class="h2">Shuffler</p>
+                <p class="smt weather" style="margin-bottom: 2px;" onclick="showf('weather');">Select to set up weather
+                </p>
+                <p class="fucku"><button class="b1" onclick="upload();">Upload</button><button class="b1"
+                        onclick="showf('settings');">Settings</button><button class="b1"
+                        onclick="showf('about');">About</button></p>
+                <input type="text" class="i1" id="search-bar" placeholder="Search songs...">
+                <button id="cancel-btn" class="b1">Cancel search</button>
+            </div>
+            <div id="files-list">
+
+            </div></div>
+        </div>
+        <div class="fullbg hide" style="background-color: var(--lightdark); z-index: 9998;"></div>
+        <audio id="lock">
+            <source src="./assets/other/lock.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <audio id="unlock">
+            <source src="./assets/other/unlock.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <audio id="hSound">
+            <source src="./assets/other/h.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <audio id="cSound">
+            <source src="./assets/other/c.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <!--End of desktop nav-->
+    </div>
+    <div class="fullbg hide" id="lscreen" onmousedown="unlock('lscreen');">
+        <div style="top: 50%; left: 50%; position: fixed; transform: translate(-50%, -50%);">
+            <img style="width: 100px; height: 100px; border: none;" src="./assets/img/lock.svg">
+            <p class="h2 time" style="color: #fff !important;"></p>
+        </div>
+    </div>
+    <script src="./assets/lib/jq.js"></script>
+    <script src="./assets/apps/loosecode.js"></script>
+    <script src="./assets/lib/tagger.js"></script>
+    <script src="./assets/code/idb.js"></script>
+    <script src="./assets/apps/weather.js"></script>
+    <script src="./assets/code/core.js"></script>
+    <script src="./assets/code/ui.js"></script>
+    <script src="./assets/code/opfile.js"></script>
+    <script src="./assets/code/files.js"></script>
+    <script>
+        let started = false;
+        var customCursor = document.createElement("div");
+        document.onload = boots2();
+
+        async function boots2() {
+            if (locked === false && started === false) {
+                console.log(`<i> Password applied. Starting stage 2.`);
+                started = "full";
+                hidef('loading');
+                showcls('whar'); hidecls('whar2');
+                const wd = await readvar('wd');
+                const accent = await readvar('accent');
+                const appear2 = await readvar('appear');
+                const forcedata = await readvar('forcedata');
+                const wb = await readpb('wb');
+                if (wb === "f") {
+                    cv('winc', 'transparent');
+                }
+                const ws = await readpb('ws');
+                if (ws === "f") {
+                    cv('wins', 'none');
+                }
+                if (forcedata == "off") {
+                    forcedatac = false;
+                } else {
+                    forcedatac = true;
+                }
+                if (accent) {
+                    chacc(accent);
+                }
+                if (wd) {
+                    const w1 = await readvar('city');
+                    const w2 = await readvar('unit');
+                    getWeather(w1, w2);
+                }
+                if (appear2 === "d") {
+                    appear();
+                }
+                masschange('lastedit', lastedit);
+                masschange('ver', ver);
+                // applications here
+                console.log('<i> Successful boot, welcome to WebDesk!');
+            } else {
+                panic(`Tried finishing boot without pass confirm`);
+            }
+        }
+    </script>
+</body>
+
+</html>

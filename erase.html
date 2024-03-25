@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebDesk (Erase)</title>
+    <link rel="shortcut icon" href="./assets/img/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="./assets/core.css">
+    <script>
+        var ver = "0.0.1";
+        var lastedit = "Mar 3, 2024";
+        var crashed = false;
+        var mostrecerr = "No history."
+        var forcedatac = true;
+        var promptreboot = false;
+        var locked = true;
+        var abs = true;
+        var gfx = true;
+        var wcur = true;
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+        async function panic(cont) {
+            if (crashed === false) {
+                delvar('bootload');
+                writevar('panic', cont, 'r');
+                crashed = true;
+                send(`Crash: ${cont}`);
+            } else {
+                console.log('<!> Already panicking!');
+            }
+        }
+        console.log(`%c /\\_/\\  Erase Assistant ${ver}
+%c( o.o ) Edited ${lastedit}
+%c > ^ <  randomuser691337`, 'color: orange', 'color: orange', 'color: orange');
+
+        console.log(`<!> Do not paste anything here, as doing so may allow anyone full access to this WebDesk.`);
+    </script>
+</head>
+
+<body>
+    <div class="fullbg" id="nest">
+        <div id="setup" class="window" style="width: 350px; display: block !important;">
+            <div class="title-bar">Erase Assistant <button class="winb" onclick="mkw(`<p>Erase Assistant <span class='med'>${ver}</span></p><p>Last edited <span class='med'>${lastedit}</span></p>`, 'About');">About</button></div>
+            <div class="content">
+                <div id="setup1">
+                    <p>Erase Assistant is an emergency tool to erase WebDesk installs that are too damaged to erase normally.</p>
+                    <p>Click "Erase" to erase or "Exit" to stop.</p>
+                    <button class="b1" onclick='window.location = "./index.html";'>Exit</button><button class="b1" onclick="burnitall();">Erase</button>
+                </div>
+            </div>
+        </div>
+        <audio id="hSound">
+            <source src="./assets/other/h.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <audio id="cSound">
+            <source src="./assets/other/c.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+    </div>
+    <script src="./assets/code/jq.js"></script>
+    <script src="./assets/code/core.js"></script>
+    <script src="./assets/code/ui.js"></script>
+    <script>
+        centerel('setup');
+        const DB_NAME = "WebDeskStore";
+        const STORE_NAME = "WebDeskDB";
+        let NTName = "database"; 
+        let dbPromise = null;
+        var pass = "def"
+        function initDB() {
+            if (dbPromise) {
+                return dbPromise;
+            }
+
+            dbPromise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const request = indexedDB.open(NTName, 1);
+
+                    request.onerror = (event) => {
+                        reject(`<!> Couldn't open IDB! Run fuck() for details.`);
+                        mostrecerr = event.target.errorCode;
+                        panic(`Coudn't open IDB, which is a critical part of WebDesk.`);
+                    };
+
+                    request.onsuccess = (event) => {
+                        const db = event.target.result;
+                        resolve(db);
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        const objectStore = db.createObjectStore('settings', { keyPath: 'name' });
+                        objectStore.transaction.oncomplete = () => {
+                            resolve(db);
+                        };
+                    };
+                }, 200);
+            });
+
+            return dbPromise;
+        }
+
+        function erasepb() {
+            localStorage.clear();
+        }
+
+        async function eraseall() {
+            try {
+                if (crashed == true) { console.log('Rejected FS action: crashed!'); return; }
+                indexedDB.deleteDatabase(NTName);
+                // Don't forget the little one!
+                erasepb();
+                console.log('<i> Erased container successfully.');
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function burnitall() {
+            try {
+                await eraseall();
+                promptreboot = false;
+                window.location = "./index.html";
+            } catch (error) {
+                console.log('[CRT] Erase failed! Details: ' + error);
+                mkw('<p>Erase may have failed! Reload, chances are that it succeded.</p><button class="b1" onclick="window.location.reload();">Reload</button>', 'Reset Error', '450px');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -2,7 +2,7 @@
     --background: #fff;
     --accent: 40, 70, 235;
     --lightdark: #fff;
-    --lightdarkb: #e7e7e7;
+    --lightdarkb: #d4d4d4;
     --bordercolor: #dfdfdf;
     --rad1: 14px;
     --rad2: 9px;
@@ -14,7 +14,9 @@
     --slbl: blur(4px);
     --mdbl: blur(8px);
     --winc: rgba(var(--accent), 0.08);
+    --isat: invert(0);
     --wins: 0 0 34px rgba(0, 0, 0, 0.22);
+    --covsc: 1.0;
 }
 
 @font-face {
@@ -148,6 +150,63 @@ input:placeholder {
     transform: scale(0.92);
 }
 
+.icon {
+    background-color: transparent;
+    margin: 1px;
+    transition: 0.1s;
+    cursor: pointer;
+    border: none !important;
+    filter: var(--isat);
+    width: 48px;
+    margin-left: 2px; margin-right: 2px;
+    height: 48px;
+}
+
+.icon:hover {
+    transform: scale(1.04);
+}
+
+.icon:active {
+    transform: scale(0.92);
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 95%;
+    box-sizing: border-box;
+    height: 10px;
+    background: var(--lightdarkb);
+    border-radius: 5px;
+}
+
+input[type=range]::-moz-range-progress {
+    background: rgba(var(--accent), 0.7);
+}
+
+input[type=range]::-webkit-progress-value {
+    background: rgba(var(--accent), 0.7);
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: rgba(var(--accent), 0.7);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: rgba(var(--accent), 0.7);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .winb {
     border-radius: var(--rad2);
     border: 1px solid transparent;
@@ -245,13 +304,12 @@ input:placeholder {
     }
 }
 
-.shadow {
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 12px 36px 0px, rgba(0, 0, 0, 0.25) 0px 0px 0px 1px;
-}
-
 .window {
     position: fixed;
-    left: 0px; top: 0px; bottom: 0px; right: 0px;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
     background-color: var(--lightdark);
     position: absolute;
     display: none;
@@ -272,10 +330,11 @@ input:placeholder {
 }
 
 .close {
-   position: fixed;
-   left: 50%; bottom: 0px;
-   transform: translate(-50%, -50%);
-   z-index: 3;   
+    position: fixed;
+    left: 50%;
+    bottom: 0px;
+    transform: translate(-50%, -50%);
+    z-index: 3;
 }
 
 .title-bar:active {
@@ -287,7 +346,7 @@ input:placeholder {
     padding: 18px;
     padding-bottom: 9px;
     background-color: var(--winc);
-    width: 100%; 
+    width: 100%;
     height: 100%;
     box-sizing: border-box;
 }
@@ -317,9 +376,16 @@ button {
     font-size: var(--fz1);
 }
 
+button:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 12px 36px 0px, rgba(0, 0, 0, 0.25) 0px 0px 0px 1px;
+}
+
 #mainmenu {
     position: fixed;
-    left: 0px; right: 0px; top: 0px; bottom: 0px;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
     padding: 0px;
     background-color: var(--lightdark);
     display: block !important;
@@ -515,7 +581,7 @@ a:active {
 
 .list {
     padding: 7px;
-    border-radius: 7px;
+    border-radius: 9px;
     background-color: rgba(var(--accent), 0.3);
     width: 100%;
     box-sizing: border-box;
@@ -702,14 +768,25 @@ body {
     80% {
         stroke-dashoffset: 0;
     }
-    
+
     100% {
         stroke-dashoffset: 5800;
     }
 }
 
 @keyframes fucker {
-    0% {opacity: 0%; transform: scale(0);}
-    85% {opacity: 0%; transform: scale(0);}
-    100% {opacity: 100%; transform: scale(1);}
+    0% {
+        opacity: 0%;
+        transform: scale(0);
+    }
+
+    85% {
+        opacity: 0%;
+        transform: scale(0);
+    }
+
+    100% {
+        opacity: 100%;
+        transform: scale(1);
+    }
 }

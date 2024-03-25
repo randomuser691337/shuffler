@@ -8,10 +8,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
     <link rel="stylesheet" href="./assets/core.css">
-    <link rel="stylesheet" href="./assets/browser.css">
     <link rel="apple-touch-icon" href="./assets/img/favicon.png">
     <script>
-        var ver = "0.0.1";
+        var ver = "0.0.2";
         var lastedit = "Mar 24, 2024";
         var crashed = false;
         var mostrecerr = "No history."
@@ -21,6 +20,15 @@
         var gfx = true;
         var wcur = true;
         var dispo = false;
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/assets/code/sw.js').then(function (registration) {
+                    console.log('<i> serviceworker thing worked: ', registration.scope);
+                }, function (err) {
+                    console.log('<!> sw reg failed: ', err);
+                });
+            });
+        }
         document.addEventListener('touchstart', function (event) {
             if (event.touches.length > 1) {
                 event.preventDefault();
@@ -206,8 +214,7 @@
         <div class="window" id="media" name="Media">
             <div class="content" id="media2"></div>
             <div class="close">
-                <button class="b1" id="killsong">Stop</button><button class="b1"
-                    onclick="fesw('media', 'settings');fesw('closes1', 'closes2');">Settings</button>
+                <button class="b1" id="killsong">Stop</button><button id="loopbtn" class="b1">Loop: Off</button>
             </div>
         </div>
         <div class="window" id="about" name="About"
@@ -234,19 +241,18 @@
         <!--End of settings-->
         <div id="mainmenu" style="display: block;">
             <div class="content">
-            <div style="position: sticky;">
-                <p class="h2">Shuffler</p>
-                <p class="smt weather" style="margin-bottom: 2px;" onclick="showf('weather');">Select to set up weather
-                </p>
-                <p class="fucku"><button class="b1" onclick="upload();">Upload</button><button class="b1"
-                        onclick="showf('settings');">Settings</button><button class="b1"
-                        onclick="showf('about');">About</button></p>
-                <input type="text" class="i1" id="search-bar" placeholder="Search songs...">
-                <button id="cancel-btn" class="b1">Cancel search</button>
-            </div>
-            <div id="files-list">
+                <div style="position: sticky;">
+                    <p class="h2">Shuffler</p>
+                    <p class="smt weather" style="margin-bottom: 4px;" onclick="showf('weather');">Select to set up
+                        weather
+                    </p>
+                    <input type="text" class="i1" id="search-bar" placeholder="Search songs...">
+                    <p class="fucku" style="margin-bottom: 4px;"><button class="b1" onclick="upload();">Upload</button><button class="b1" onclick="apps();">Apps</button><button id="cancel-btn" class="b1" style="margin-bottom: 1px;">Cancel search</button></p>
+                </div>
+                <div id="files-list">
 
-            </div></div>
+                </div>
+            </div>
         </div>
         <div class="fullbg hide" style="background-color: var(--lightdark); z-index: 9998;"></div>
         <audio id="lock">

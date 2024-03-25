@@ -37,3 +37,6 @@ async function holyshit() {
         fesw('setup2', 'setup3');
     }
 }
+function apps() {
+    cm(`<button class="b1 b2" onclick="showf('about');">About</button><button class="b1 b2" onclick="showf('settings');">Settings</button><button class="b1 b2" onclick="showf('weather');">Weather</button><button style="margin-top: 2px;" class="b1">Close</button>`);
+}

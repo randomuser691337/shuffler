@@ -18,7 +18,6 @@ function wal(content, btn1, n) {
     windowContainer.appendChild(titleBar);
     document.getElementById('nest').appendChild(windowContainer);
     centerel(windowId); winrec(windowContainer);
-    ib();
 }
 
 function opapp(d1) {
@@ -202,10 +201,11 @@ async function appear(mode) {
     if (mode === "l") {
         changevar('background', '#fff');
         changevar('lightdark', '#fff');
-        changevar('lightdarkb', '#E7E7E7');
+        changevar('lightdarkb', '#d4d4d4');
         changevar('fontc', '#000');
         changevar('fontc2', "#333");
         changevar('bordercolor', "#DFDFDF");
+        changevar('isat', "invert(0)");
         await writevar('appear', 'l');
     } else {
         changevar('background', '#000');
@@ -214,6 +214,7 @@ async function appear(mode) {
         changevar('fontc', '#fff');
         changevar('fontc2', "#aaa");
         changevar('bordercolor', "#3a3a3a");
+        changevar('isat', "invert(1)");
         await writevar('appear', 'd');
     }
 }

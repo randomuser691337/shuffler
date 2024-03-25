@@ -73,8 +73,7 @@ function upload() {
 let cachedSongs = [];
 let currentSongIndex = -1;
 async function cacheAllSongs() {
-    let songCount = 0; // Initialize song count
-    const cachedSongs = [];
+    cachedSongs = [];
     const db = await initDB();
     const transaction = db.transaction('settings', 'readonly');
     const objectStore = transaction.objectStore('settings');
@@ -88,15 +87,9 @@ async function cacheAllSongs() {
                 let found = valuesToCheck.find(value => key.includes(value));
                 if (found === ".mp3" || found === ".wav" || found === ".mpeg") {
                     cachedSongs.push({ key, fileName });
-                    songCount++;
                 }
             }
         });
-
-        if (keys.length === songCount) {
-            writevar('songcount', songCount);
-            masschange('songcount', songCount);
-        }
     };
 
     request.onerror = (event) => {
@@ -108,12 +101,7 @@ let playedSongs = [];
 
 function skip() {
     if (cachedSongs.length > 0) {
-        let nextSongIndex = (currentSongIndex + 1) % cachedSongs.length;
-        while (playedSongs.includes(nextSongIndex)) {
-            nextSongIndex = (nextSongIndex + 1) % cachedSongs.length;
-        }
-        currentSongIndex = nextSongIndex;
-        playedSongs.push(currentSongIndex);
+        currentSongIndex = (currentSongIndex + 1) % cachedSongs.length;
         const { key, fileName } = cachedSongs[currentSongIndex];
         readAndPlaySong(key, fileName);
     }
@@ -213,7 +201,6 @@ window.updatefilesList = async function () {
                 p.appendChild(deleteButton);
                 p.appendChild(renButton);
                 filesList.appendChild(listItem);
-                ib();
             }
         });
     };

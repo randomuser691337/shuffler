@@ -141,7 +141,7 @@ function cm(cont, t) {
     snackElement.innerHTML = cont;
     document.body.appendChild(snackElement);
     snackElement.onclick = function () {
-        setTimeout(function () {dest(fuckyou);}, 100);
+        setTimeout(function () { dest(fuckyou); }, 100);
     }
 }
 
@@ -294,6 +294,39 @@ function detectWordAndReturn(wordToDetect, arrayOfWords) {
         }
     }
 }
+
+function adjustColorComponent(component) {
+    const percentage = 0.23;
+    const adjustment = Math.round(255 * percentage);
+    if (component === 0) {
+        return Math.min(255, component + adjustment);
+    }
+    else if (component === 255) {
+        return Math.max(0, component - adjustment);
+    }
+    else {
+        return component;
+    }
+}
+
+function sampleColors(imageData) {
+    const pixels = imageData.data;
+    const middleWidth = imageData.width - 8;
+    const middleHeight = imageData.height - 8;
+    const pixelCount = middleWidth * middleHeight;
+
+    const colorCounts = {};
+    for (let i = 0; i < pixelCount; i++) {
+        const r = adjustColorComponent(pixels[i * 4]);
+        const g = adjustColorComponent(pixels[i * 4 + 1]);
+        const b = adjustColorComponent(pixels[i * 4 + 2]);
+        const color = `${r},${g},${b}`;
+        colorCounts[color] = (colorCounts[color] || 0) + 1;
+    }
+    const sortedColors = Object.keys(colorCounts).sort((a, b) => colorCounts[b] - colorCounts[a]);
+    return sortedColors.map(color => color.split(',').map(Number));
+}
+
 
 function exec(url) {
     if (sandParam) {

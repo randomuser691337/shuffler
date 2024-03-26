@@ -82,10 +82,12 @@ function showcls(className) {
         elements[i].style.display = 'inline';
     }
 }
-function changevar(varName, varValue) {
+function changevar(varName, varValue, dontwrite) {
     const root = document.documentElement;
     root.style.setProperty(`--${varName}`, `${varValue}`);
-    writevar(varName, varValue);
+    if (dontwrite === !true) {
+        writevar(varName, varValue);
+    }
 }
 // A smaller remap for say, onclicks where you want to keep your code small
 function cv(name, val) {

@@ -7,12 +7,12 @@
     <link rel="shortcut icon" href="./assets/img/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="var(--lightdark)">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
     <link rel="apple-touch-icon" href="./assets/img/favicon.png">
     <script>
-        var ver = "0.0.4";
-        var lastedit = "Mar 25, 2024";
+        var ver = "0.0.5";
+        var lastedit = "Mar 26, 2024";
         var crashed = false;
         var mostrecerr = "No history."
         var forcedatac = true;
@@ -130,6 +130,13 @@
                     <p><button class="b1 light" onclick="appear('l');">Light</button><button style="margin-left: 3px;"
                             class="b1 dark" onclick="appear();">Dark</button><button style="margin-left: 3px;"
                             class="b1" onclick="writevar('appear', 'a', 'r');">Auto (restart)</button></p>
+                    <p>Player</p>
+                    <p>Adaptive player colors</p>
+                    <p class="smt">Themes the player based off album cover.</p>
+                    <button class="b3 green"
+                        onclick="writevar('playerc', 'y');snack('Saved player settings.', '2500');">Enable
+                        (default)</button><button class="b3 red"
+                        onclick="delvar('playerc');snack('Saved player settings.', '2500');">Disable</button>
                     <p>Other</p>
                     <p><button class="winb" onclick="fesw('settingsappear', 'settingsui');opapp('settings');">UI
                             settings</button><button class="winb"
@@ -167,8 +174,8 @@
                     <p>Override player interface</p>
                     <p class="smt">Forces the player to adopt the mobile UI, regardless of device.</p>
                     <button class="b3 green"
-                        onclick="writevar('mobileover', 'y');snack('Saved button settings.', '2500');">Enable</button><button
-                        class="b3 red" onclick="delvar('mobileover');snack('Saved button settings.', '2500');">Disable
+                        onclick="writevar('mobileover', 'y');snack('Saved UI settings.', '2500');">Enable</button><button
+                        class="b3 red" onclick="delvar('mobileover');snack('Saved UI settings.', '2500');">Disable
                         (default)</button>
                     <p>Window tinting</p>
                     <p class="smt">Adds a slight accent to app backgrounds. Disable on low-end devices.</p>
@@ -297,6 +304,7 @@
     <script src="./assets/code/ui.js"></script>
     <script src="./assets/code/opfile.js"></script>
     <script src="./assets/code/files.js"></script>
+    <script src="./assets/code/color.js"></script>
     <script>
         let started = false;
         var customCursor = document.createElement("div");

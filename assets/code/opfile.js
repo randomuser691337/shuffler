@@ -1,4 +1,5 @@
 async function playaud(base64Content, contentType) {
+    var acc = await readvar('accent');
     const binaryContent = atob(base64Content.split(',')[1]);
     const arrayBuffer = new ArrayBuffer(binaryContent.length);
     const view = new Uint8Array(arrayBuffer);
@@ -22,21 +23,32 @@ async function playaud(base64Content, contentType) {
             throw new Error('Unsupported audio format');
     }
 
-    var blob = new Blob([arrayBuffer], { type: mimeType });
-
-    let base64String = '';
-
+    let blob = new Blob([arrayBuffer], { type: mimeType });
     jsmediatags.read(blob, {
-        onSuccess: function (tag) {
+        onSuccess: async function (tag) {
             cv('covsc', '0.8');
+            let base64String = "";
             const wint = truncater(tag.tags.title, 26);
             const alb = truncater(tag.tags.album, 22);
             const nm = truncater(tag.tags.artist, 26);
             const yr = tag.tags.year;
             const albumImg = tag.tags.picture;
-            if (albumImg) {
-                base64String = "data:" + albumImg.format + ";base64," + arrayBufferToBase64(albumImg.data);
+            const enabled = await readvar('playerc');
+            if (albumImg && enabled === "y") {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    context.drawImage(img, 0, 0);
+                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    const colors = sampleColors(imageData);
+                    changevar('accent', colors[0], true);
+                };
+                img.src = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
             }
+            base64String = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
             const e2 = gen(7);
             const e5 = gen(7);
             const e7 = gen(7);
@@ -51,13 +63,19 @@ async function playaud(base64Content, contentType) {
             }
             if (isMobileDevice()) {
                 var audPlayer = `
-                <div style="position: fixed; left: 12vw; right: 12vw; top: 14vw; z-index: 2; overflow-y: auto !important;">
+                <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
                     <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
                     width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="lyrics('${tag.tags.lyrics}');">
-                    <p class="med">${wint}</p>
+                    <p class="med" style="margin-top: 9px;">${wint}</p>
                     <p class="med">${nm}</p>
-                    <p class="med">${alb} - ${yr}</p>
-                    <p class="smt">Progress: <input type="range" id="${e5}" min="0" max="100" value="0"></p>
+                    <p class="med"style="margin-bottom: 9px;">${alb} - ${yr}</p>
+                    <div class="flex-container">
+                        <div class="timeplayed" class="smt">0:00</div>
+                        <div class="flex-bar">
+                            <input type="range" id="${e5}" min="0" max="100" value="0">
+                        </div>
+                        <div class="songlength" class="smt">0:00</div>
+                    </div>
                     <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
                 </div>`;
             } else {
@@ -72,6 +90,7 @@ async function playaud(base64Content, contentType) {
                     <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
                 </div>`;
             }
+            
             if ("mediaSession" in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: tag.tags.title,
@@ -151,6 +170,7 @@ async function playaud(base64Content, contentType) {
                 isPaused = false;
                 pauseBtn.src = './assets/img/circle-pause.svg';
                 cv('covsc', '0.8');
+                cv('accent', acc);
                 clapp('media');
             });
 
@@ -189,6 +209,23 @@ async function playaud(base64Content, contentType) {
                 scrubber.value = progress;
             });
 
+            audio.addEventListener('timeupdate', function () {
+                const timePlayed = formattime(audio.currentTime);
+                masschange('timeplayed', timePlayed);
+            });
+            
+            audio.addEventListener('loadedmetadata', function() {
+                const songLength = formattime(audio.duration);
+                masschange('songlength', songLength);
+            });
+            
+            function formattime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                const formattedtime = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+                return formattedtime;
+            }            
+            
             loopBtn.textContent = 'Loop: Off';
             let loopEnabled = false;
 

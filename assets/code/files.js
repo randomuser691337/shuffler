@@ -121,7 +121,7 @@ async function readAndPlaySong(key, fileName) {
     const content = await readvar(key);
     let found = valuesToCheck.find(value => key.includes(value));
     found = found.toLowerCase();
-    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg") {
+    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
         playaud(content, found, fileName);
     }
 }
@@ -148,7 +148,7 @@ window.updatefilesList = async function () {
                 listItem.className = "list";
                 let found = valuesToCheck.find(value => key.includes(value));
                 const viewBtn = document.createElement('button');
-                if (found === ".mp3" || found === ".wav" || found === ".mpeg") {
+                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
                     viewBtn.textContent = "Play";
                     viewBtn.className = "winb";
                     viewBtn.addEventListener('click', async () => {

@@ -1,4 +1,4 @@
-function playaud(base64Content, contentType) {
+async function playaud(base64Content, contentType) {
     const binaryContent = atob(base64Content.split(',')[1]);
     const arrayBuffer = new ArrayBuffer(binaryContent.length);
     const view = new Uint8Array(arrayBuffer);
@@ -28,6 +28,7 @@ function playaud(base64Content, contentType) {
 
     jsmediatags.read(blob, {
         onSuccess: function (tag) {
+            cv('covsc', '0.8');
             const wint = truncater(tag.tags.title, 26);
             const alb = truncater(tag.tags.album, 22);
             const nm = truncater(tag.tags.artist, 26);
@@ -40,14 +41,19 @@ function playaud(base64Content, contentType) {
             const e5 = gen(7);
             const e7 = gen(7);
             const e8 = gen(7);
-            function isMobileDevice() {
-                return /Mobi|Android/i.test(navigator.userAgent);
+            async function isMobileDevice() {
+                const override = await readvar('mobileover');
+                if (!override === "y") {
+                    return /Mobi|Android/i.test(navigator.userAgent);
+                } else {
+                    return true;
+                }
             }
             if (isMobileDevice()) {
                 var audPlayer = `
                 <div style="position: fixed; left: 12vw; right: 12vw; top: 14vw; z-index: 2; overflow-y: auto !important;">
                     <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
-                    width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));">
+                    width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="lyrics('${tag.tags.lyrics}');">
                     <p class="med">${wint}</p>
                     <p class="med">${nm}</p>
                     <p class="med">${alb} - ${yr}</p>
@@ -95,16 +101,16 @@ function playaud(base64Content, contentType) {
                     clapp('media');
                 });
                 navigator.mediaSession.setActionHandler("previoustrack", () => {
+                    back();
                     audio.pause();
                     URL.revokeObjectURL(blob);
                     blob = null;
-                    back();
                 });
                 navigator.mediaSession.setActionHandler("nexttrack", () => {
+                    skip();
                     audio.pause();
                     URL.revokeObjectURL(blob);
                     blob = null;
-                    skip();
                 });
             }
             showf('media');
@@ -144,17 +150,19 @@ function playaud(base64Content, contentType) {
                 blob = null;
                 isPaused = false;
                 pauseBtn.src = './assets/img/circle-pause.svg';
-                cv('covsc', '1.0');
+                cv('covsc', '0.8');
                 clapp('media');
             });
 
             skipBtn.addEventListener('click', function () {
+                cv('covsc', '0.8');
                 audio.pause();
                 URL.revokeObjectURL(blob);
                 blob = null;
             });
 
             backBtn.addEventListener('click', function () {
+                cv('covsc', '0.8');
                 audio.pause();
                 URL.revokeObjectURL(blob);
                 blob = null;
@@ -195,6 +203,16 @@ function playaud(base64Content, contentType) {
             console.error("Error reading metadata:", error);
         }
     });
+}
+
+function lyrics(text) {
+    const div = document.createElement('div');
+    const id = gen(7);
+    div.id = id;
+    div.className = "lyric";
+    document.getElementById('media').appendChild(div);
+    div.innerHTML = text;
+    div.onclick = function () {dest(id);}
 }
 
 function arrayBufferToBase64(buffer) {

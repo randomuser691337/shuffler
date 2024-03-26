@@ -119,8 +119,9 @@ function back() {
 // Function to read and play song
 async function readAndPlaySong(key, fileName) {
     const content = await readvar(key);
-    const found = valuesToCheck.find(value => key.includes(value));
-    if (found === ".mp3" || found === ".wav" || found === ".mpeg") {
+    let found = valuesToCheck.find(value => key.includes(value));
+    found = found.toLowerCase();
+    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg") {
         playaud(content, found, fileName);
     }
 }

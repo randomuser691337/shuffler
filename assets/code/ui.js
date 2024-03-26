@@ -207,6 +207,13 @@ async function appear(mode) {
         changevar('bordercolor', "#DFDFDF");
         changevar('isat', "invert(0)");
         await writevar('appear', 'l');
+    } else if (mode === "a") {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            appear();
+        } else {
+            appear('l');
+        }
     } else {
         changevar('background', '#000');
         changevar('lightdark', '#1a1a1a');

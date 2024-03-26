@@ -126,9 +126,9 @@ function passtimedesk(el) {
 
 async function unlock2() {
     console.log(`<i> Password correct. Unlocking...`);
-    showcls('whar'); hidecls('whar2'); showf('nest');
     const audio = document.getElementById("unlock");
     audio.currentTime = 0;
+    locked = false;
     audio.volume = 1.0;
     audio.play();
 }
@@ -164,6 +164,7 @@ async function lock() {
 }
 
 async function unlock(yeah) {
+    unlock2();
     const fullBg = document.getElementById(yeah);
     const windowHeight = window.innerHeight;
     const transitionEndPromise = new Promise(resolve => {
@@ -180,61 +181,57 @@ async function unlock(yeah) {
     fullBg.style.transform = 'translateY(0)';
 }
 
-async function finishsetup() {
-    fesw('setup3', 'setup4');
-    await writepb('setupdone', 'y');
-    const hai = await readvar('name');
-    desktop(hai, 'fuckoff');
-    mkw(`<p>It's recommended to reboot before using WebDesk for the first time.</p><button class="b1" onclick="reboot();">Reboot</button>`, 'Setup Assistant', '270px');
-    await writevar('check', 'passed');
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const currentDate = new Date();
-    const month = months[currentDate.getMonth()];
-    const day = currentDate.getDate();
-    const year = currentDate.getFullYear();
-    await writevar('setupon', `${month} ${day}, ${year}`);
-    await writevar('ogver', ver);
+async function searchLyrics(songName, songArtist) {
+    const accessToken = 'hbtXmGou14878nmsIDFpqprJHjeVYumqatTAtSaEFQX7qAy7qXKxaBnYT6GRr9IQCxAL6c_6mMg9LbvkN7aReA';
+    const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(songName)} ${encodeURIComponent(songArtist)}`;
+
+    try {
+        const response = await fetch(searchUrl, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            console.log(`<!> Lyrics fetch failed!`);
+            return '<p>Lyrics not available for this song / check your Internet</p>';
+        }
+
+        const data = await response.json();
+        const hit = data.response.hits.find(hit => {
+            return hit.result.primary_artist.name.toLowerCase() === songArtist.toLowerCase();
+        });
+
+        if (!hit) {
+            return '<p>Lyrics not available for this song</p>';
+        }
+
+        const lyricsUrl = hit.result.url;
+        const lyricsResponse = await fetch(lyricsUrl);
+        const lyricsHtml = await lyricsResponse.text();
+        const lyrics = extractLyrics(lyricsHtml);
+
+        return lyrics;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+function extractLyrics(lyricsHtml) {
+    const doc = new DOMParser().parseFromString(lyricsHtml, 'text/html');
+    const lyricsElement = doc.querySelector('.lyrics');
+
+    if (!lyricsElement) {
+        throw new Error('Lyrics not found in page');
+    }
+
+    return lyricsElement.textContent.trim();
 }
 
 function reboot() {
     window.location.reload();
 }
-
-const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-let i = 0;
-
-document.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.key === "l") {
-        lock();
-    } else if (e.key === konamiCode[i++]) {
-        if (i === konamiCode.length) {
-            const win = `<p>This is meant for developers, or maybe you were curious. Don't click anything, if you don't know what it does.</p>
-            <button class="b1 b2" onclick="burnitall('justreload');">Erase Now</button><button class="b1 b2" onclick="opapp('terminal')">Terminal</button>`
-            mkw(win, 'Debug Menu', '320px');
-            i = 0;
-        }
-    } else {
-        i = 0;
-    }
-});
-
-let timeoutId;
-let timeoutDuration = 300000;
-
-function resetTimeout() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(lock, timeoutDuration);
-}
-
-function timeoutChange(timeInMs) {
-    timeoutDuration = timeInMs;
-    resetTimeout();
-    snack('Changed lock timeout successfully.', '3300');
-}
-
-document.addEventListener("mousemove", resetTimeout);
-document.addEventListener("keypress", resetTimeout);
-resetTimeout();
 
 function centerel(el) {
     const element = document.getElementById(el);
@@ -249,11 +246,6 @@ function centerel(el) {
 
     element.style.left = `${leftPosition}px`;
     element.style.top = `${topPosition}px`;
-}
-
-async function sandbox() {
-    showf('sandbox');
-    customCursor.style.opacity = "0%";
 }
 
 function doc(path, title, width, height) {
@@ -309,6 +301,11 @@ function adjustColorComponent(component) {
     }
 }
 
+function isBlackOrWhite(r, g, b) {
+    return (r < 90 && g < 90 && b < 90) ||
+        (r > 90 && g > 90 && b > 90);
+}
+
 function sampleColors(imageData) {
     const pixels = imageData.data;
     const middleWidth = imageData.width - 8;
@@ -320,13 +317,14 @@ function sampleColors(imageData) {
         const r = adjustColorComponent(pixels[i * 4]);
         const g = adjustColorComponent(pixels[i * 4 + 1]);
         const b = adjustColorComponent(pixels[i * 4 + 2]);
-        const color = `${r},${g},${b}`;
-        colorCounts[color] = (colorCounts[color] || 0) + 1;
+        if (!isBlackOrWhite(r, g, b)) {
+            const color = `${r},${g},${b}`;
+            colorCounts[color] = (colorCounts[color] || 0) + 1;
+        }
     }
     const sortedColors = Object.keys(colorCounts).sort((a, b) => colorCounts[b] - colorCounts[a]);
     return sortedColors.map(color => color.split(',').map(Number));
 }
-
 
 function exec(url) {
     if (sandParam) {

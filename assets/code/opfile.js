@@ -60,11 +60,19 @@ async function playaud(base64Content, contentType) {
                     return true;
                 }
             }
+            let lyr = 'Undefined';
+            await searchLyrics(tag.tags.title, tag.tags.artist)
+                .then(lyrics => {
+                    lyr = lyrics;
+                })
+                .catch(error => {
+                    lyr = error;
+                });
             if (isMobileDevice()) {
                 var audPlayer = `
                 <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
                     <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
-                    width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="lyrics('${tag.tags.lyrics}');">
+                    width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="lyrics('${lyr}');">
                     <p class="med" style="margin-top: 9px;">${wint}</p>
                     <p class="med">${nm}</p>
                     <p class="med"style="margin-bottom: 9px;">${alb} - ${yr}</p>
@@ -81,7 +89,7 @@ async function playaud(base64Content, contentType) {
                 var audPlayer = `
                 <div style="margin-top: 20px;">
                     <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
-                    width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));">
+                    width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 12px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="lyrics('${lyr}');">
                     <p class="med">${wint}</p>
                     <p class="med">${nm}</p>
                     <p class="med">${alb} - ${yr}</p>
@@ -89,7 +97,7 @@ async function playaud(base64Content, contentType) {
                     <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
                 </div>`;
             }
-            
+
             if ("mediaSession" in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: tag.tags.title,
@@ -110,7 +118,14 @@ async function playaud(base64Content, contentType) {
                     audio.pause();
                 });
                 navigator.mediaSession.setActionHandler("stop", () => {
-                    reboot();
+                    audio.pause();
+                    chacc(acce);
+                    URL.revokeObjectURL(blob);
+                    blob = null;
+                    isPaused = false;
+                    pauseBtn.src = './assets/img/circle-pause.svg';
+                    cv('covsc', '0.8');
+                    yay(); clapp('media');
                 });
                 navigator.mediaSession.setActionHandler("previoustrack", () => {
                     back();
@@ -157,7 +172,14 @@ async function playaud(base64Content, contentType) {
             });
 
             closeBtn.addEventListener('click', function () {
-                reboot();
+                audio.pause();
+                chacc(acce);
+                URL.revokeObjectURL(blob);
+                blob = null;
+                isPaused = false;
+                pauseBtn.src = './assets/img/circle-pause.svg';
+                cv('covsc', '0.8');
+                yay(); clapp('media');
             });
 
             skipBtn.addEventListener('click', function () {
@@ -199,19 +221,19 @@ async function playaud(base64Content, contentType) {
                 const timePlayed = formattime(audio.currentTime);
                 masschange('timeplayed', timePlayed);
             });
-            
-            audio.addEventListener('loadedmetadata', function() {
+
+            audio.addEventListener('loadedmetadata', function () {
                 const songLength = formattime(audio.duration);
                 masschange('songlength', songLength);
             });
-            
+
             function formattime(seconds) {
                 const minutes = Math.floor(seconds / 60);
                 const remainingSeconds = Math.floor(seconds % 60);
                 const formattedtime = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
                 return formattedtime;
-            }            
-            
+            }
+
             loopBtn.textContent = 'Loop: Off';
             let loopEnabled = false;
 
@@ -235,7 +257,7 @@ function lyrics(text) {
     div.className = "lyric";
     document.getElementById('media').appendChild(div);
     div.innerHTML = text;
-    div.onclick = function () {dest(id);}
+    div.onclick = function () { dest(id); }
 }
 
 function arrayBufferToBase64(buffer) {

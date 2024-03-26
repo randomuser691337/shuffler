@@ -8,10 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta charset="UTF-8">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
     <link rel="apple-touch-icon" href="./assets/img/favicon.png">
     <script>
-        var ver = "0.0.5";
+        var ver = "0.0.6";
         var lastedit = "Mar 26, 2024";
         var crashed = false;
         var mostrecerr = "No history."
@@ -242,7 +243,7 @@
         </div>
         <!--End of settings-->
         <div id="mainmenu" style="display: block;">
-            <div class="content">
+            <div class="content" style="overflow: auto !important;">
                 <div style="position: sticky;">
                     <p class="h2">Shuffler</p>
                     <p class="smt weather" style="margin-bottom: 10px !important;" onclick="showf('weather');">Select to
@@ -258,6 +259,10 @@
 
                 </div>
             </div>
+        </div>
+        <div id="uploadwarn" style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 12px; background-color: var(--lightdarkb); padding: 10px; display: none; z-index: 9995;">
+            <p>Files are being uploaded, please wait.</p>
+            <p>Do not reload!</p>
         </div>
         <div class="fullbg hide" style="background-color: var(--lightdark); z-index: 9998;"></div>
         <audio id="lock">
@@ -304,52 +309,57 @@
         document.onload = boots2();
 
         async function boots2() {
-            if (locked === false && started === false) {
-                var accent = await readvar('accent');
-                console.log(`<i> Password applied. Starting stage 2.`);
-                started = "full";
-                hidef('loading');
-                showcls('whar'); hidecls('whar2');
-                const wd = await readvar('wd');
-                const appear2 = await readvar('appear');
-                const forcedata = await readvar('forcedata');
-                const wb = await readpb('wb');
-                if (wb === "f") {
-                    cv('winc', 'transparent');
-                }
-                const ws = await readpb('ws');
-                if (ws === "f") {
-                    cv('wins', 'none');
-                }
-                if (forcedata == "off") {
-                    forcedatac = false;
-                } else {
-                    forcedatac = true;
-                }
-                if (accent) {
-                    chacc(accent);
-                }
-                if (wd) {
-                    const w1 = await readvar('city');
-                    const w2 = await readvar('unit');
-                    getWeather(w1, w2);
-                }
-                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (prefersDark) {
-                    appear('a');
-                }
-
-                if (appear2 === "d") {
-                    appear();
-                } else if (appear2 === "l") {
-                    appear('l');
-                }
-                masschange('lastedit', lastedit);
-                masschange('ver', ver);
-                // applications here
-                console.log('<i> Successful boot, welcome to WebDesk!');
+            var accent = await readvar('accent');
+            console.log(`<i> Starting stage 1 (originally 2).`);
+            started = "full";
+            showcls('whar'); hidecls('whar2');
+            const wd = await readvar('wd');
+            const appear2 = await readvar('appear');
+            const forcedata = await readvar('forcedata');
+            const wb = await readpb('wb');
+            if (wb === "f") {
+                cv('winc', 'transparent');
+            }
+            const ws = await readpb('ws');
+            if (ws === "f") {
+                cv('wins', 'none');
+            }
+            if (forcedata == "off") {
+                forcedatac = false;
             } else {
-                panic(`Tried finishing boot without pass confirm`);
+                forcedatac = true;
+            }
+            if (accent) {
+                changevar('accent', accent);
+            } else {
+                await writevar('accent', '40, 70, 235');
+            }
+            if (wd) {
+                const w1 = await readvar('city');
+                const w2 = await readvar('unit');
+                getWeather(w1, w2);
+            }
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                appear('a');
+            }
+
+            if (appear2 === "d") {
+                appear();
+            } else if (appear2 === "l") {
+                appear('l');
+            }
+            hidef('loading', 100);
+            masschange('lastedit', lastedit);
+            masschange('ver', ver);
+            // applications here
+            console.log('<i> Successful boot, welcome to WebDesk!');
+        }
+
+        async function yay() {
+            var accent = await readvar('accent');
+            if (accent) {
+                chacc(accent);
             }
         }
     </script>

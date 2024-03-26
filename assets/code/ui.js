@@ -4,20 +4,15 @@ function wal(content, btn1, n) {
     windowContainer.className = 'window';
     windowContainer.id = windowId;
     windowContainer.style.display = "block";
-    windowContainer.style.zIndex = 2;
-    windowContainer.style.width = '300px';
-    windowContainer.style.height = 'auto';
     const titleBar = document.createElement('div');
-    titleBar.className = 'title-bar';
+    titleBar.className = 'content';
     titleBar.style.border = "none";
-    titleBar.style.borderRadius = "12px";
     if (!n) {
         n = "Okay"
     }
     titleBar.innerHTML = content + `<p><button class="b1 wc" onclick="dest('${windowId}');">Close</button><button class="b1 wc" onclick="dest('${windowId}');${btn1}">${n}</button></p>`;
     windowContainer.appendChild(titleBar);
     document.getElementById('nest').appendChild(windowContainer);
-    centerel(windowId); winrec(windowContainer);
 }
 
 function opapp(d1) {
@@ -66,9 +61,15 @@ function hidef(d1, anim) {
         }
     }
 }
-function showf(d1) {
+function showf(d1, anim) {
     const dr1 = document.getElementById(d1);
-    $(dr1).fadeIn(170);
+    if (dr1) {
+        if (anim) {
+            $(dr1).fadeIn(anim);
+        } else {
+            $(dr1).fadeIn(170);
+        }
+    }
 }
 function hidecls(className) {
     var elements = document.getElementsByClassName(className);
@@ -102,6 +103,7 @@ function truncater(inputString, size) {
 }
 async function chacc(clr1) {
     changevar('accent', clr1);
+    await writevar('accent', clr1);
     acce = await readvar('accent');
 }
 function dest(d1) {

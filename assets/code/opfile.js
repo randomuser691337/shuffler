@@ -110,13 +110,7 @@ async function playaud(base64Content, contentType) {
                     audio.pause();
                 });
                 navigator.mediaSession.setActionHandler("stop", () => {
-                    audio.pause();
-                    URL.revokeObjectURL(blob);
-                    blob = null;
-                    isPaused = false;
-                    pauseBtn.src = './assets/img/circle-pause.svg';
-                    cv('covsc', '1.0');
-                    clapp('media');
+                    reboot();
                 });
                 navigator.mediaSession.setActionHandler("previoustrack", () => {
                     back();
@@ -163,14 +157,7 @@ async function playaud(base64Content, contentType) {
             });
 
             closeBtn.addEventListener('click', function () {
-                audio.pause();
-                chacc(acce);
-                URL.revokeObjectURL(blob);
-                blob = null;
-                isPaused = false;
-                pauseBtn.src = './assets/img/circle-pause.svg';
-                cv('covsc', '0.8');
-                clapp('media');
+                reboot();
             });
 
             skipBtn.addEventListener('click', function () {

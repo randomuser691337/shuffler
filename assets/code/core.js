@@ -182,51 +182,28 @@ async function unlock(yeah) {
 }
 
 async function searchLyrics(songName, songArtist) {
-    const accessToken = 'hbtXmGou14878nmsIDFpqprJHjeVYumqatTAtSaEFQX7qAy7qXKxaBnYT6GRr9IQCxAL6c_6mMg9LbvkN7aReA';
-    const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(songName)} ${encodeURIComponent(songArtist)}`;
+    const searchUrl = `https://api.lyrics.ovh/v1/${encodeURIComponent(songArtist)}/${encodeURIComponent(songName)}`;
 
     try {
-        const response = await fetch(searchUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
+        const response = await fetch(searchUrl);
 
         if (!response.ok) {
-            console.log(`<!> Lyrics fetch failed!`);
-            return '<p>Lyrics not available for this song / check your Internet</p>';
+            throw new Error('Failed to fetch lyrics');
         }
 
         const data = await response.json();
-        const hit = data.response.hits.find(hit => {
-            return hit.result.primary_artist.name.toLowerCase() === songArtist.toLowerCase();
-        });
 
-        if (!hit) {
-            return '<p>Lyrics not available for this song</p>';
+        if (!data.lyrics) {
+            throw new Error('Lyrics not found for this song');
         }
 
-        const lyricsUrl = hit.result.url;
-        const lyricsResponse = await fetch(lyricsUrl);
-        const lyricsHtml = await lyricsResponse.text();
-        const lyrics = extractLyrics(lyricsHtml);
+        const lyrics = data.lyrics.replace(/'/g, '');
 
         return lyrics;
     } catch (error) {
-        console.error(error);
-        return null;
+        console.error(error.message);
+        return '<p>Failed to fetch lyrics for this song</p>';
     }
-}
-
-function extractLyrics(lyricsHtml) {
-    const doc = new DOMParser().parseFromString(lyricsHtml, 'text/html');
-    const lyricsElement = doc.querySelector('.lyrics');
-
-    if (!lyricsElement) {
-        throw new Error('Lyrics not found in page');
-    }
-
-    return lyricsElement.textContent.trim();
 }
 
 function reboot() {

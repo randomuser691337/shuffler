@@ -1,5 +1,5 @@
 async function playaud(base64Content, contentType) {
-    var acc = await readvar('accent');
+    const acce = await readvar('accent');
     const binaryContent = atob(base64Content.split(',')[1]);
     const arrayBuffer = new ArrayBuffer(binaryContent.length);
     const view = new Uint8Array(arrayBuffer);
@@ -33,8 +33,7 @@ async function playaud(base64Content, contentType) {
             const nm = truncater(tag.tags.artist, 26);
             const yr = tag.tags.year;
             const albumImg = tag.tags.picture;
-            const enabled = await readvar('playerc');
-            if (albumImg && enabled === "y") {
+            if (albumImg) {
                 const img = new Image();
                 img.onload = function () {
                     const canvas = document.createElement('canvas');
@@ -165,12 +164,12 @@ async function playaud(base64Content, contentType) {
 
             closeBtn.addEventListener('click', function () {
                 audio.pause();
+                chacc(acce);
                 URL.revokeObjectURL(blob);
                 blob = null;
                 isPaused = false;
                 pauseBtn.src = './assets/img/circle-pause.svg';
                 cv('covsc', '0.8');
-                cv('accent', acc);
                 clapp('media');
             });
 

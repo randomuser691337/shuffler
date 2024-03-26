@@ -100,8 +100,9 @@ function truncater(inputString, size) {
         return inputString.slice(0, size - 3) + '...';
     }
 }
-function chacc(clr1) {
+async function chacc(clr1) {
     changevar('accent', clr1);
+    acce = await readvar('accent');
 }
 function dest(d1) {
     const dr1 = document.getElementById(d1);

@@ -130,13 +130,6 @@
                     <p><button class="b1 light" onclick="appear('l');">Light</button><button style="margin-left: 3px;"
                             class="b1 dark" onclick="appear();">Dark</button><button style="margin-left: 3px;"
                             class="b1" onclick="writevar('appear', 'a', 'r');">Auto (restart)</button></p>
-                    <p>Player</p>
-                    <p>Adaptive player colors</p>
-                    <p class="smt">Themes the player based off album cover.</p>
-                    <button class="b3 green"
-                        onclick="writevar('playerc', 'y');snack('Saved player settings.', '2500');">Enable
-                        (default)</button><button class="b3 red"
-                        onclick="delvar('playerc');snack('Saved player settings.', '2500');">Disable</button>
                     <p>Other</p>
                     <p><button class="winb" onclick="fesw('settingsappear', 'settingsui');opapp('settings');">UI
                             settings</button><button class="winb"
@@ -312,12 +305,12 @@
 
         async function boots2() {
             if (locked === false && started === false) {
+                var accent = await readvar('accent');
                 console.log(`<i> Password applied. Starting stage 2.`);
                 started = "full";
                 hidef('loading');
                 showcls('whar'); hidecls('whar2');
                 const wd = await readvar('wd');
-                const accent = await readvar('accent');
                 const appear2 = await readvar('appear');
                 const forcedata = await readvar('forcedata');
                 const wb = await readpb('wb');

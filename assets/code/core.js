@@ -296,7 +296,7 @@ function detectWordAndReturn(wordToDetect, arrayOfWords) {
 }
 
 function adjustColorComponent(component) {
-    const percentage = 0.23;
+    const percentage = 0.1;
     const adjustment = Math.round(255 * percentage);
     if (component === 0) {
         return Math.min(255, component + adjustment);

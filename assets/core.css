@@ -109,6 +109,7 @@ p {
     border-top-right-radius: 15px;
     padding: 15px;
     background-color: var(--lightdark);
+    overflow: auto !important;
 }
 
 .smt {
@@ -404,6 +405,7 @@ button {
 }
 
 button:hover {
+    box-shadow: 0px -50px 50px rgba(0, 0, 0, 0.6);
     box-shadow: rgba(0, 0, 0, 0.25) 0px 12px 36px 0px, rgba(0, 0, 0, 0.25) 0px 0px 0px 1px;
 }
 

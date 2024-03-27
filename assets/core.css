@@ -104,8 +104,9 @@ p {
     right: 0px;
     top: 15vh;
     bottom: 0px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    display: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     padding: 15px;
     background-color: var(--lightdark);
 }

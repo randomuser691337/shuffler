@@ -188,16 +188,16 @@ async function searchLyrics(songName, songArtist) {
         const response = await fetch(searchUrl);
 
         if (!response.ok) {
-            throw new Error('Failed to fetch lyrics');
+            return "<p>Lyrics not available for this song. Check your Internet connection.</p>"
         }
 
         const data = await response.json();
 
         if (!data.lyrics) {
-            throw new Error('Lyrics not found for this song');
+            return '<p>Lyrics not available for this song.</p>';
         }
 
-        const lyrics = data.lyrics.replace(/'/g, '');
+        const lyrics = data.lyrics;
 
         return lyrics;
     } catch (error) {

@@ -27,6 +27,10 @@ async function playaud(base64Content, contentType) {
         onSuccess: async function (tag) {
             cv('covsc', '0.8');
             let base64String = "";
+            const audio = new Audio();
+            audio.src = URL.createObjectURL(blob);
+            audio.type = contentType;
+            audio.play();
             const wint = truncater(tag.tags.title, 26);
             const alb = truncater(tag.tags.album, 22);
             const nm = truncater(tag.tags.artist, 26);
@@ -61,23 +65,13 @@ async function playaud(base64Content, contentType) {
             }
             let lyr = `Lyrics doesn't work right now. Check back`;
             let lyrid = undefined;
-            await searchLyrics(tag.tags.title, tag.tags.artist)
-                .then(lyrics => {
-                    const withoutFirstLine = lyrics.split('\n').slice(1).join('\n');
-                    const sanitizedText = withoutFirstLine.replace(/\n/g, '</p><p>');
-                    const div = document.createElement('div');
-                    const id = gen(7);
-                    lyrid = id;
-                    div.id = id;
-                    div.className = "lyric";
-                    document.getElementById('media').appendChild(div);
-                    div.innerHTML = sanitizedText;
-                    div.onclick = function () { hidef(id); }
-                })
-                .catch(error => {
-                    lyr = error;
-                });
-
+            const div = document.createElement('div');
+            const id = gen(7);
+            lyrid = id;
+            div.id = id;
+            div.className = "lyric";
+            document.getElementById('media').appendChild(div);
+            div.onclick = function () { hidef(id); }
             if (isMobileDevice()) {
                 var audPlayer = `
                 <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
@@ -138,24 +132,20 @@ async function playaud(base64Content, contentType) {
                     yay(); clapp('media');
                 });
                 navigator.mediaSession.setActionHandler("previoustrack", () => {
-                    back();
                     audio.pause();
+                    back();
                     URL.revokeObjectURL(blob);
                     blob = null;
                 });
                 navigator.mediaSession.setActionHandler("nexttrack", () => {
-                    skip();
                     audio.pause();
+                    skip();
                     URL.revokeObjectURL(blob);
                     blob = null;
                 });
             }
             showf('media');
             document.getElementById('media2').innerHTML = audPlayer;
-            const audio = new Audio();
-            audio.src = URL.createObjectURL(blob);
-            audio.type = contentType;
-            audio.play();
             const pauseBtn = document.getElementById(e2);
             const closeBtn = document.getElementById('killsong');
             const scrubber = document.getElementById(e5);
@@ -252,7 +242,15 @@ async function playaud(base64Content, contentType) {
                 audio.loop = loopEnabled;
                 loopBtn.textContent = `Loop: ${loopEnabled ? 'On' : 'Off'}`;
             });
-
+            await searchLyrics(tag.tags.title, tag.tags.artist)
+                .then(lyrics => {
+                    const withoutFirstLine = lyrics.split('\n').slice(1).join('\n');
+                    const sanitizedText = withoutFirstLine.replace(/\n/g, '</p><p>');
+                    div.innerHTML = sanitizedText;
+                })
+                .catch(error => {
+                    div.innerHTML = error;
+                });
         },
         onError: function (error) {
             console.error("Error reading metadata:", error);

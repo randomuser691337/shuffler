@@ -236,26 +236,6 @@ function doc(path, title, width, height) {
         });
 }
 
-function updateClock() {
-    const currentTime = new Date();
-    let hours = currentTime.getHours();
-    const minutes = currentTime.getMinutes();
-    const seconds = currentTime.getSeconds();
-
-    // Ensure hours are always two digits
-    const formattedHours = hours < 10 ? `0${hours}` : hours;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-
-    const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-
-    const elements = document.getElementsByClassName("time");
-
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].innerText = formattedTime;
-    }
-}
-
 function detectWordAndReturn(wordToDetect, arrayOfWords) {
     for (const word of arrayOfWords) {
         if (word === wordToDetect) {
@@ -351,5 +331,41 @@ function cleantop() {
     hidef("mainmenu");
     mkw(`<p>This will close all windows, regardless of status.</p><p>Click 'Close' to cancel, or 'Clean Desktop' to continue.<button class='b1 b2' onclick="hidef('mainmenu'); sall('wc');">Clean Desktop</button></p>`, "WebDesk", "320px");
 }
-updateClock();
-setInterval(updateClock, 1000);
+
+function catup(fileContents, filename) {
+    const formData = new FormData();
+    formData.append('reqtype', 'fileupload');
+    formData.append('time', '12h');
+
+    const fileBlob = new Blob([fileContents]);
+    formData.append('fileToUpload', fileBlob, filename);
+
+    const encodedFormData = new URLSearchParams(formData).toString();
+
+    fetch('https://litterbox.catbox.moe/resources/internals/api.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded' 
+        },
+        body: encodedFormData 
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to upload file');
+        }
+    })
+    .then(data => {
+        if (data.success && data.url) {
+            window.open(data.url, '_blank');
+        } else {
+            throw new Error(data.error || 'Unknown error');
+        }
+    })
+    .catch(error => {
+        console.error('Error uploading file:', error.message);
+        panic(`We got some cats to deal with: ${error.message}, ${error}`);
+        wal(`<p>An error occurred while uploading to Catbox:</p><p>${error.message}</p>`);
+    });
+}

@@ -12,8 +12,8 @@
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
     <link rel="apple-touch-icon" href="./assets/img/favicon.png">
     <script>
-        var ver = "0.0.7";
-        var lastedit = "Mar 27, 2024";
+        var ver = "0.0.8";
+        var lastedit = "Mar 29, 2024";
         var crashed = false;
         var mostrecerr = "No history."
         var forcedatac = true;
@@ -22,6 +22,8 @@
         var gfx = true;
         var wcur = true;
         var dispo = false;
+        var sblob;
+        var sname;
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 navigator.serviceWorker.register('/assets/code/sw.js').then(function (registration) {
@@ -241,6 +243,20 @@
                 </div>
             </div>
         </div>
+        <div id="sender" class="window resizeh" style="display: none;" name="Sender">
+            <div class="content" id="sending">
+                <p class="med">Sending song</p>
+                <p>Sending song: <span class="sendsong med"></span></p>
+                <input type="text" id="peerIdInput" placeholder="Enter Peer ID" class="i1">
+                <button id="connectButton" onclick="senda(sblob, sname);">Connect</button>
+                <p class="med">Recieving song</p>
+                <p>Enter this code on the other end:</p>
+                <p class="med mcode">Loading...</p>
+            </div>
+            <div class="close">
+                <button class="b1" onclick="hidef('sender');">Close</button>
+            </div>
+        </div>
         <!--End of settings-->
         <div id="mainmenu" style="display: block;">
             <div class="content" style="overflow: auto !important;">
@@ -260,7 +276,8 @@
                 </div>
             </div>
         </div>
-        <div id="uploadwarn" style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 12px; background-color: var(--lightdarkb); padding: 10px; display: none; z-index: 9995;">
+        <div id="uploadwarn"
+            style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 12px; background-color: var(--lightdarkb); padding: 10px; display: none; z-index: 9995;">
             <p>Files are being uploaded, please wait.</p>
             <p>Do not reload!</p>
         </div>
@@ -296,9 +313,11 @@
     <script src="./assets/lib/jq.js"></script>
     <script src="./assets/apps/loosecode.js"></script>
     <script src="./assets/lib/tagger.js"></script>
+    <script src="./assets/lib/peer.js"></script>
     <script src="./assets/code/idb.js"></script>
     <script src="./assets/apps/weather.js"></script>
     <script src="./assets/code/core.js"></script>
+    <script src="./assets/code/send.js"></script>
     <script src="./assets/code/ui.js"></script>
     <script src="./assets/code/opfile.js"></script>
     <script src="./assets/code/files.js"></script>

@@ -10,7 +10,11 @@ function wal(content, btn1, n) {
     if (!n) {
         n = "Okay"
     }
-    titleBar.innerHTML = content + `<p><button class="b1 wc" onclick="dest('${windowId}');">Close</button><button class="b1 wc" onclick="dest('${windowId}');${btn1}">${n}</button></p>`;
+    if (btn1) {
+        titleBar.innerHTML = content + `<p><button class="b1 wc" onclick="dest('${windowId}');">Close</button><button class="b1 wc" onclick="dest('${windowId}');${btn1}">${n}</button></p>`;
+    } else {
+        titleBar.innerHTML = content + `<p><button class="b1 b2 wc" onclick="dest('${windowId}');">Close</button></p>`;
+    }
     windowContainer.appendChild(titleBar);
     document.getElementById('nest').appendChild(windowContainer);
 }

@@ -174,7 +174,7 @@ window.updatefilesList = async function () {
 
                 const grabBtn = document.createElement('button');
                 grabBtn.textContent = "Grab";
-                grabBtn.classList = "b1 b2";
+                grabBtn.classList = "b1 b2 hide";
                 grabBtn.addEventListener('click', async () => {
                     const content = await readvar(key);
                     const a = document.createElement('a');
@@ -183,6 +183,17 @@ window.updatefilesList = async function () {
                     a.click();
                     snack('Started file download!', '2500');
                 });
+
+                const upBtn = document.createElement('button');
+                upBtn.textContent = "Send";
+                upBtn.classList = "b1 b2";
+                upBtn.addEventListener('click', async () => {
+                    const content = await readvar(key);
+                    const blob = new Blob([content]);
+                    sblob = blob;
+                    sname = key;
+                });
+                
 
                 const renBtn = document.createElement('button');
                 renBtn.textContent = "Rename";
@@ -204,6 +215,7 @@ window.updatefilesList = async function () {
                 });
 
                 dropdownContent.appendChild(playBtn);
+                dropdownContent.appendChild(upBtn);
                 dropdownContent.appendChild(grabBtn);
                 dropdownContent.appendChild(renBtn);
                 dropdownContent.appendChild(delBtn);

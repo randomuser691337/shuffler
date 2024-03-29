@@ -1,22 +1,16 @@
 var valuesToCheck = [".jpg", ".png", ".svg", ".jpeg", ".webp", ".mp3", ".mp4", ".webm", '.wav', '.mpeg', '.gif'];
-let uploadsCompleted = 0;
 async function handleFileUpload(file, totalFiles) {
     try {
-        showf('uploadwarn', 120);
+        showf('uploadwarn', 0);
         const reader = new FileReader();
         reader.onload = async () => {
             const fileName = 'locker_' + file.name;
             const content = reader.result;
             await writevar(fileName, content);
-            uploadsCompleted++;
-            if (uploadsCompleted === totalFiles) {
-                window.updatefilesList();
-                uploadsCompleted = 0;
-                hidef('uploadwarn', 120);
-            }
+            window.updatefilesList();
+            hidef('uploadwarn', 0);
         };
         reader.readAsDataURL(file);
-        snack('Uploaded file successfully! WebDesk might have frozen if the file was large, wait for it to unfreeze.', '3000');
     } catch (error) {
         snack(`files error: ${error}`, '3500');
         console.log(error);
@@ -193,7 +187,7 @@ window.updatefilesList = async function () {
                     sblob = blob;
                     sname = key;
                 });
-                
+
 
                 const renBtn = document.createElement('button');
                 renBtn.textContent = "Rename";

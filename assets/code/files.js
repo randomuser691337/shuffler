@@ -66,7 +66,7 @@ async function cacheAllSongs() {
             if (key.startsWith('locker_')) {
                 const fileName = key.slice(7);
                 let found = valuesToCheck.find(value => key.includes(value));
-                if (found === ".mp3" || found === ".wav" || found === ".mpeg") {
+                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".flac" || found === ".ogg") {
                     cachedSongs.push({ key, fileName });
                 }
             }
@@ -168,7 +168,7 @@ window.updatefilesList = async function () {
 
                 const grabBtn = document.createElement('button');
                 grabBtn.textContent = "Grab";
-                grabBtn.classList = "b1 b2 hide";
+                grabBtn.classList = "b1 b2";
                 grabBtn.addEventListener('click', async () => {
                     const content = await readvar(key);
                     const a = document.createElement('a');
@@ -180,12 +180,12 @@ window.updatefilesList = async function () {
 
                 const upBtn = document.createElement('button');
                 upBtn.textContent = "Send";
-                upBtn.classList = "b1 b2";
+                upBtn.classList = "b1 b2 hide";
                 upBtn.addEventListener('click', async () => {
                     const content = await readvar(key);
-                    const blob = new Blob([content]);
-                    sblob = blob;
+                    sblob = content;
                     sname = key;
+                    showf('sender');
                 });
 
 
@@ -196,7 +196,7 @@ window.updatefilesList = async function () {
                     const boxId = gen(7);
                     const win = `<p>Renaming <span class="med">${fileName}</span></p><p>Enter a name that isn't already used, or else this file will overwrite the other file.</p>
                     <input class="i1" id="${boxId}" placeholder="Name here"/>`;
-                    wal(win, `renfiles('${key}', '${boxId}');$(this).parent().parent().fadeOut('150', function() {$(this).remove();});`, 'Rename');
+                    wal(win, `renfiles('${key}', '${boxId}');`, 'Rename');
                 });
 
                 const delBtn = document.createElement('button');

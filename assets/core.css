@@ -17,6 +17,7 @@
     --isat: invert(0);
     --wins: 0 0 34px rgba(0, 0, 0, 0.22);
     --covsc: 1.0;
+    --iospwa: black;
 }
 
 @font-face {
@@ -584,15 +585,15 @@ a:active {
 }
 
 .acb {
-    width: 23px !important;
-    height: 23px !important;
-    border-radius: 10px;
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 12px;
     margin: 1px;
     margin-top: 4px;
     padding: 0px !important;
     border: none;
     cursor: pointer;
-    transition: 0.08s;
+    transition: 0.06s;
     background-color: #1a1a1a;
 }
 
@@ -662,7 +663,18 @@ a:active {
     transform: translate(-50%);
     animation: fade 0.7s;
     max-width: 70%;
+    z-index: 9999;
     cursor: pointer;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Distribute items evenly */
+}
+
+.button-container button {
+    flex-grow: 1; /* Allow buttons to grow to fill space */
+    margin: 0 2px; /* Add spacing between buttons */
 }
 
 .progress-bar {

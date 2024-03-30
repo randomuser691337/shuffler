@@ -16,16 +16,13 @@ function initializePeerConnection() {
     });
 
     peer.on('connection', (conn) => {
-        const lobotomi = document.getElementById('lobotomy');
-        if (lobotomi) {
-            lobotomi.innerHTML = "Migrating, please wait..."
-        }
         console.log('<i> Connection started.');
         conn.on('data', async (data) => {
             const name = data.name;
-            const blob = data.blob; // Retrieve blob directly
-            // Decode blob later to extract content
-            const content = await blob.text(); // Convert blob to text content
+            const blob = data.blob;
+            const reader = new FileReader();
+            const content = await new Response(blob).text()
+            reader.readAsText(blob);
             console.log(name);
             console.log(content);
             window.updatefilesList();
@@ -63,6 +60,6 @@ async function senda(content, name) {
 }
 
 // Event listener for window load
-window.addEventListener('DOMContentLoaded', function() {
-    initializePeerConnection(); 
+window.addEventListener('DOMContentLoaded', function () {
+    initializePeerConnection();
 });

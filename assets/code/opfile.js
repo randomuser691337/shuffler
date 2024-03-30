@@ -89,7 +89,7 @@ async function playaud(base64Content, contentType) {
                     var audPlayer = `
                     <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
                         <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
-                        width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 16px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
+                        width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
                         <p class="med" style="margin-top: 9px;">${wint}</p>
                         <p class="med">${nm}</p>
                         <p class="med"style="margin-bottom: 9px;">${alb} - ${yr}</p>
@@ -106,7 +106,7 @@ async function playaud(base64Content, contentType) {
                     var audPlayer = `
                         <div style="margin-top: 20px;">
                             <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
-                            width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 16px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
+                            width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
                             <p class="med">${wint}</p>
                             <p class="med">${nm}</p>
                             <p class="med">${alb} - ${yr}</p>

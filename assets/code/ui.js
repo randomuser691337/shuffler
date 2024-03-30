@@ -215,6 +215,7 @@ async function appear(mode) {
         changevar('fontc2', "#333");
         changevar('bordercolor', "#DFDFDF");
         changevar('isat', "invert(0)");
+        changevar('iospwa', "white");
         await writevar('appear', 'l');
     } else if (mode === "a") {
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -231,6 +232,7 @@ async function appear(mode) {
         changevar('fontc2', "#aaa");
         changevar('bordercolor', "#3a3a3a");
         changevar('isat', "invert(1)");
+        changevar('iospwa', "black");
         await writevar('appear', 'd');
     }
 }

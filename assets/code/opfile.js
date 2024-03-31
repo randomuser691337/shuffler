@@ -114,12 +114,10 @@ async function playaud(base64Content, contentType) {
                         URL.revokeObjectURL(blob);
                         blob = null;
                     });
-                    navigator.mediaSession.setActionHandler("seekbackward", (details) => {
-                        audio.currentTime -= (details.seekOffset || 10);
-                    });
-                    navigator.mediaSession.setActionHandler("seekforward", (details) => {
-                        audio.currentTime += (details.seekOffset || 10);
-                    });
+                    scrubber.addEventListener('input', function () {
+                        const seekTo = audio.duration * (parseFloat(this.value) / 100);
+                        audio.currentTime = seekTo;
+                    });                    
                 }
                 const e2 = gen(7);
                 const e5 = gen(7);

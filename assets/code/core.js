@@ -60,10 +60,6 @@ function gen(length) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function prr(val) {
-    mkw(`<p>Please reboot to ${val}</p><button class="b1 b2" onclick="reboot();">Reboot</button>`, 'WebDesk', '270px');
-}
-
 async function desktop(name, fuckstart) {
     showf('mainbtn'); dest('setup'); showf('nest');
     masschange('user', name);
@@ -89,41 +85,6 @@ function stm(winc, winn, wins) {
     return ret;
 }
 
-async function nametime(el, reb) {
-    const elID = document.getElementById(el).value;
-    if (elID === "") {
-        snack('Enter a username!', '3000');
-        return false;
-    } else {
-        if (reb === "y") {
-            await writevar('name', elID, 'r');
-        } else {
-            await writevar('name', elID);
-        }
-        return true;
-    }
-}
-
-function passtime(el) {
-    const elID = document.getElementById(el).value;
-    if (elID === "") {
-        snack('Enter a password!', '3000');
-        return false;
-    } else {
-        pass = elID;
-        return true;
-    }
-}
-
-function passtimedesk(el) {
-    const elID = document.getElementById(el).value;
-    if (elID === "") {
-        snack('Enter a password!', '3000');
-    } else {
-        passchange(elID);
-    }
-}
-
 async function unlock2() {
     console.log(`<i> Password correct. Unlocking...`);
     const audio = document.getElementById("unlock");
@@ -133,7 +94,7 @@ async function unlock2() {
     audio.play();
 }
 
-function cm(cont, t) {
+function cm(cont) {
     const snackElement = document.createElement("div");
     snackElement.className = "cm";
     const fuckyou = gen(7);
@@ -283,25 +244,6 @@ function sampleColors(imageData) {
     return sortedColors.map(color => color.split(',').map(Number));
 }
 
-function exec(url) {
-    if (sandParam) {
-        appendScript(url);
-    } else {
-        const allowedUrls = ["./assets/apps/rosetoy.js"];
-        if (allowedUrls.includes(url)) {
-            appendScript(url);
-        } else {
-            mkw(`<p>That code is not from WebDesk, and cannot be run right now.</p>`, 'Security', '250px');
-        }
-    }
-
-    function appendScript(url) {
-        const scriptElement = document.createElement('script');
-        scriptElement.src = url;
-        document.head.appendChild(scriptElement);
-    }
-}
-
 async function send(cont) {
     // don't be a dick (i guess, people on the internet don't listen and you shouldn't expect them to)
     try {
@@ -332,40 +274,20 @@ function cleantop() {
     mkw(`<p>This will close all windows, regardless of status.</p><p>Click 'Close' to cancel, or 'Clean Desktop' to continue.<button class='b1 b2' onclick="hidef('mainmenu'); sall('wc');">Clean Desktop</button></p>`, "WebDesk", "320px");
 }
 
-function catup(fileContents, filename) {
-    const formData = new FormData();
-    formData.append('reqtype', 'fileupload');
-    formData.append('time', '12h');
-
-    const fileBlob = new Blob([fileContents]);
-    formData.append('fileToUpload', fileBlob, filename);
-
-    const encodedFormData = new URLSearchParams(formData).toString();
-
-    fetch('https://litterbox.catbox.moe/resources/internals/api.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded' 
-        },
-        body: encodedFormData 
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Failed to upload file');
-        }
-    })
-    .then(data => {
-        if (data.success && data.url) {
-            window.open(data.url, '_blank');
-        } else {
-            throw new Error(data.error || 'Unknown error');
-        }
-    })
-    .catch(error => {
-        console.error('Error uploading file:', error.message);
-        panic(`We got some cats to deal with: ${error.message}, ${error}`);
-        wal(`<p>An error occurred while uploading to Catbox:</p><p>${error.message}</p>`);
-    });
+function updateClock() {
+    const currentTime = new Date();
+    let hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes();
+    const seconds = currentTime.getSeconds();
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    const elements = document.getElementsByClassName("time");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].innerText = formattedTime;
+    }
 }
+
+updateClock();
+setInterval(updateClock, 1000);

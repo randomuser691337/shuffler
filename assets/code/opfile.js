@@ -73,54 +73,6 @@ async function playaud(base64Content, contentType) {
                     img.src = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
                 }
                 base64String = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
-                const e2 = gen(7);
-                const e5 = gen(7);
-                const e7 = gen(7);
-                const e8 = gen(7);
-                let lyrid = undefined;
-                const div = document.createElement('div');
-                const id = gen(7);
-                lyrid = id;
-                div.id = id;
-                div.className = "lyric";
-                document.getElementById('media').appendChild(div);
-                div.onclick = function () { hidef(id); }
-                if (isMobileDevice()) {
-                    var audPlayer = `
-                    <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
-                        <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
-                        width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
-                        <p class="med" style="margin-top: 9px;">${wint}</p>
-                        <p class="med">${nm}</p>
-                        <p class="med"style="margin-bottom: 9px;">${alb} - ${yr}</p>
-                        <div class="flex-container">
-                            <div class="timeplayed" class="smt">0:00</div>
-                            <div class="flex-bar">
-                                <input type="range" id="${e5}" min="0" max="100" value="0">
-                            </div>
-                            <div class="songlength" class="smt">0:00</div>
-                        </div>
-                        <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
-                    </div>`;
-                } else {
-                    var audPlayer = `
-                        <div style="margin-top: 20px;">
-                            <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
-                            width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
-                            <p class="med">${wint}</p>
-                            <p class="med">${nm}</p>
-                            <p class="med">${alb} - ${yr}</p>
-                            <div class="flex-container">
-                            <div class="timeplayed" class="smt">0:00</div>
-                            <div class="flex-bar">
-                                <input type="range" id="${e5}" min="0" max="100" value="0">
-                            </div>
-                            <div class="songlength" class="smt">0:00</div>
-                        </div>
-                            <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
-                        </div>`;
-                }
-
                 if ("mediaSession" in navigator) {
                     navigator.mediaSession.metadata = new MediaMetadata({
                         title: tag.tags.title,
@@ -162,6 +114,59 @@ async function playaud(base64Content, contentType) {
                         URL.revokeObjectURL(blob);
                         blob = null;
                     });
+                    navigator.mediaSession.setActionHandler("seekbackward", (details) => {
+                        audio.currentTime -= (details.seekOffset || 10);
+                    });
+                    navigator.mediaSession.setActionHandler("seekforward", (details) => {
+                        audio.currentTime += (details.seekOffset || 10);
+                    });
+                }
+                const e2 = gen(7);
+                const e5 = gen(7);
+                const e7 = gen(7);
+                const e8 = gen(7);
+                let lyrid = undefined;
+                const div = document.createElement('div');
+                const id = gen(7);
+                lyrid = id;
+                div.id = id;
+                div.className = "lyric";
+                document.getElementById('media').appendChild(div);
+                div.onclick = function () { hidef(id); }
+                if (isMobileDevice()) {
+                    var audPlayer = `
+                    <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
+                        <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
+                        width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
+                        <p class="med" style="margin-top: 9px;">${wint}</p>
+                        <p class="med">${nm}</p>
+                        <p class="med"style="margin-bottom: 9px;">${alb} - ${yr}</p>
+                        <div class="flex-container">
+                            <div class="timeplayed" class="smt">0:00</div>
+                            <div class="flex-bar">
+                                <input type="range" id="${e5}" min="0" max="100" value="0">
+                            </div>
+                            <div class="songlength" class="smt">0:00</div>
+                        </div>
+                        <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
+                    </div>`;
+                } else {
+                    var audPlayer = `
+                        <div style="margin-top: 20px;">
+                            <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
+                            width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
+                            <p class="med">${wint}</p>
+                            <p class="med">${alb} - ${yr}</p>
+                            <p class="med">${nm}</p>
+                            <div class="flex-container">
+                            <div class="timeplayed" class="smt">0:00</div>
+                            <div class="flex-bar">
+                                <input type="range" id="${e5}" min="0" max="100" value="0">
+                            </div>
+                            <div class="songlength" class="smt">0:00</div>
+                        </div>
+                            <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
+                        </div>`;
                 }
                 showf('media');
                 document.getElementById('media2').innerHTML = audPlayer;

@@ -206,8 +206,21 @@ function sall(className) {
         buttons[i].click();
     }
 }
+async function setThemeColor(color) {
+    var metaTag = document.querySelector('meta[name="theme-color"]');
+    if (metaTag) {
+        metaTag.setAttribute('content', color);
+    } else {
+        var newMetaTag = document.createElement('meta');
+        newMetaTag.setAttribute('name', 'theme-color');
+        newMetaTag.setAttribute('content', color);
+        document.head.appendChild(newMetaTag);
+    }
+}
+
 async function appear(mode) {
     if (mode === "l") {
+        await setThemeColor('#ffffff');
         changevar('background', '#fff');
         changevar('lightdark', '#fff');
         changevar('lightdarkb', '#dfdfdf');
@@ -215,7 +228,6 @@ async function appear(mode) {
         changevar('fontc2', "#333");
         changevar('bordercolor', "#DFDFDF");
         changevar('isat', "invert(0)");
-        changevar('iospwa', "white");
         await writevar('appear', 'l');
     } else if (mode === "a") {
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -225,6 +237,7 @@ async function appear(mode) {
             appear('l');
         }
     } else {
+        await setThemeColor('#1a1a1a');
         changevar('background', '#000');
         changevar('lightdark', '#1a1a1a');
         changevar('lightdarkb', '#2a2a2a');
@@ -232,7 +245,6 @@ async function appear(mode) {
         changevar('fontc2', "#aaa");
         changevar('bordercolor', "#3a3a3a");
         changevar('isat', "invert(1)");
-        changevar('iospwa', "black");
         await writevar('appear', 'd');
     }
 }

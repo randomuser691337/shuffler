@@ -73,55 +73,7 @@ async function playaud(base64Content, contentType) {
                     img.src = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
                 }
                 base64String = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
-                if ("mediaSession" in navigator) {
-                    navigator.mediaSession.metadata = new MediaMetadata({
-                        title: tag.tags.title,
-                        artist: tag.tags.artist,
-                        album: tag.tags.album,
-                        artwork: [
-                            {
-                                src: base64String,
-                                sizes: "512x512",
-                                type: "image/png",
-                            },
-                        ],
-                    });
-                    navigator.mediaSession.setActionHandler("play", () => {
-                        audio.play();
-                    });
-                    navigator.mediaSession.setActionHandler("pause", () => {
-                        audio.pause();
-                    });
-                    navigator.mediaSession.setActionHandler("stop", () => {
-                        audio.pause();
-                        chacc(acce);
-                        URL.revokeObjectURL(blob);
-                        blob = null;
-                        isPaused = false;
-                        pauseBtn.src = './assets/img/circle-pause.svg';
-                        cv('covsc', '0.8');
-                        yay(); clapp('media');
-                    });
-                    navigator.mediaSession.setActionHandler("previoustrack", () => {
-                        audio.pause();
-                        back();
-                        URL.revokeObjectURL(blob);
-                        blob = null;
-                    });
-                    navigator.mediaSession.setActionHandler("nexttrack", () => {
-                        audio.pause();
-                        skip();
-                        URL.revokeObjectURL(blob);
-                        blob = null;
-                    });
-                    navigator.mediaSession.setActionHandler("seekto", (details) => {
-                        if (details.fastSeek && 'fastSeek' in audio) {
-                            audio.fastSeek(details.seekTime);
-                        } else {
-                            audio.currentTime = details.seekTime;
-                        }
-                    });
-                }
+        
                 const e2 = gen(7);
                 const e5 = gen(7);
                 const e7 = gen(7);
@@ -276,6 +228,55 @@ async function playaud(base64Content, contentType) {
                     .catch(error => {
                         div.innerHTML = error;
                     });
+                  if ("mediaSession" in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: tag.tags.title,
+                        artist: tag.tags.artist,
+                        album: tag.tags.album,
+                        artwork: [
+                            {
+                                src: base64String,
+                                sizes: "512x512",
+                                type: "image/png",
+                            },
+                        ],
+                    });
+                    navigator.mediaSession.setActionHandler("play", () => {
+                        audio.play();
+                    });
+                    navigator.mediaSession.setActionHandler("pause", () => {
+                        audio.pause();
+                    });
+                    navigator.mediaSession.setActionHandler("stop", () => {
+                        audio.pause();
+                        chacc(acce);
+                        URL.revokeObjectURL(blob);
+                        blob = null;
+                        isPaused = false;
+                        pauseBtn.src = './assets/img/circle-pause.svg';
+                        cv('covsc', '0.8');
+                        yay(); clapp('media');
+                    });
+                    navigator.mediaSession.setActionHandler("previoustrack", () => {
+                        audio.pause();
+                        back();
+                        URL.revokeObjectURL(blob);
+                        blob = null;
+                    });
+                    navigator.mediaSession.setActionHandler("nexttrack", () => {
+                        audio.pause();
+                        skip();
+                        URL.revokeObjectURL(blob);
+                        blob = null;
+                    });
+                    navigator.mediaSession.setActionHandler("seekto", (details) => {
+                        if (details.fastSeek && 'fastSeek' in audio) {
+                            audio.fastSeek(details.seekTime);
+                        } else {
+                            audio.currentTime = details.seekTime;
+                        }
+                    });
+                }
             },
             onError: function (error) {
                 panic(error);

@@ -60,6 +60,10 @@ function gen(length) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function prr(val) {
+    mkw(`<p>Please reboot to ${val}</p><button class="b1 b2" onclick="reboot();">Reboot</button>`, 'WebDesk', '270px');
+}
+
 async function desktop(name, fuckstart) {
     showf('mainbtn'); dest('setup'); showf('nest');
     masschange('user', name);
@@ -79,12 +83,6 @@ function getsh(percentage) {
     return heightInPixels + 'px';
 }
 
-function stm(winc, winn, wins) {
-    dest('nest');
-    const ret = mkw(winc, winn, wins, 's');
-    return ret;
-}
-
 async function unlock2() {
     console.log(`<i> Password correct. Unlocking...`);
     const audio = document.getElementById("unlock");
@@ -94,7 +92,7 @@ async function unlock2() {
     audio.play();
 }
 
-function cm(cont) {
+function cm(cont, t) {
     const snackElement = document.createElement("div");
     snackElement.className = "cm";
     const fuckyou = gen(7);
@@ -267,11 +265,6 @@ async function send(cont) {
     } catch (error) {
         console.log(`<!> Couldn't send: ${error}`);
     }
-}
-
-function cleantop() {
-    hidef("mainmenu");
-    mkw(`<p>This will close all windows, regardless of status.</p><p>Click 'Close' to cancel, or 'Clean Desktop' to continue.<button class='b1 b2' onclick="hidef('mainmenu'); sall('wc');">Clean Desktop</button></p>`, "WebDesk", "320px");
 }
 
 function updateClock() {

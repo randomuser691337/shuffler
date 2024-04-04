@@ -94,7 +94,6 @@ function changevar(varName, varValue, dontwrite) {
         writevar(varName, varValue);
     }
 }
-// A smaller remap for say, onclicks where you want to keep your code small
 function cv(name, val) {
     changevar(name, val);
 }
@@ -217,7 +216,6 @@ async function setThemeColor(color) {
         document.head.appendChild(newMetaTag);
     }
 }
-
 async function appear(mode) {
     if (mode === "l") {
         await setThemeColor('#ffffff');

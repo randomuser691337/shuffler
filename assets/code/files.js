@@ -1,5 +1,5 @@
 var valuesToCheck = [".jpg", ".png", ".svg", ".jpeg", ".webp", ".mp3", ".mp4", ".webm", '.wav', '.mpeg', '.gif'];
-async function handleFileUpload(file, totalFiles) {
+async function handleFileUpload(file) {
     try {
         showf('uploadwarn', 0);
         const reader = new FileReader();
@@ -74,7 +74,7 @@ async function cacheAllSongs() {
     };
 
     request.onerror = (event) => {
-        console.error("[ERR] Error fetching files variables: " + event.target.errorCode);
+        console.error("<!> Error fetching files variables: " + event.target.errorCode);
     };
 }
 
@@ -121,6 +121,12 @@ window.updatefilesList = async function () {
         }
         keys.forEach(key => {
             if (key.startsWith('locker_')) {
+                const found = valuesToCheck.find(value => key.includes(value));
+                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
+                } else {
+                    delvar(key);
+                    window.updatefilesList();
+                }
                 const fileName = key.slice(7);
                 const listItem = document.createElement('div');
                 listItem.className = "list";
@@ -130,15 +136,8 @@ window.updatefilesList = async function () {
                 nameCont.innerHTML = fileName;
                 nameCont.addEventListener('click', async () => {
                     const content = await readvar(key);
-                    const found = valuesToCheck.find(value => key.includes(value));
-                    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
-                        playaud(content, found);
-                        hidef('about');
-                    } else {
-                        delvar(key);
-                        window.updatefilesList();
-                        snack('Shuffler only supports .mp3, .wav, and .mpeg right now.', '4000');
-                    }
+                    playaud(content, found);
+                    hidef('about');
                 });
                 const dropdownContainer = document.createElement('div');
                 dropdownContainer.className = "dropdown";

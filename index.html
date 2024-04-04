@@ -12,10 +12,9 @@
     <meta name="theme-color" content="#000000">
     <meta charset="UTF-8">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
-    <link rel="apple-touch-icon" href="./assets/img/favicon.png">
     <script>
-        var ver = "0.1.0";
-        var lastedit = "Mar 31, 2024";
+        var ver = "0.1.1";
+        var lastedit = "Apr 4, 2024";
         var crashed = false;
         var mostrecerr = "No history."
         var forcedatac = true;
@@ -26,17 +25,7 @@
         var dispo = false;
         var sblob;
         var sname;
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/assets/code/sw.js').then(function (registration) {
-                    console.log('<i> serviceworker thing worked: ', registration.scope);
-                }, function (err) {
-                    console.log('<!> sw reg failed: ', err);
-                });
-            });
-        }
         async function panic(cont) {
-            await delvar('bootload');
             await send(`Panic: ${cont}`);
             await writevar('panic', cont);
         }
@@ -45,35 +34,37 @@
 %c > ^ <  randomuser691337`, 'color: orange', 'color: orange', 'color: orange');
 
         console.log(`<!> Do not paste anything here, as doing so may allow anyone full access to this Shuffler.`);
+        console.log(`<!> Yes, it's based on WebDesk. Stop messaging me about it.`)
     </script>
 </head>
 
 <body>
     <div class="fullbg" id="lockthing"></div>
-    <script>
-        document.addEventListener("click", function (e) {
-            let t = e.target;
-            if (t.id === "lockthing") {
-                t.clickCount = (t.clickCount || 0) + 1;
-                if (t.clickCount === 1) {
-                    t.timeoutID = setTimeout(() => {
-                        t.clickCount = 0;
-                    }, 1500);
-                }
-                if (t.clickCount === 2) {
-                    clearTimeout(t.timeoutID);
-                    lock();
-                    t.clickCount = 0;
-                }
-            }
-        });
-    </script>
     <div id="nest">
         <div id="loading"
             style="position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 9999; background-color: #000;">
 
         </div>
+        <p class="h2 hide" style="margin-top: 12px;" id="sandwarn">Sandbox Desktop</p>
+        <div id="setupbg" onmousedown="unlock('setupbg');">
+            <div id="sorryapple">
+                <svg id="hellosvg" viewBox="0 0 1230.94 414.57">
+                    <path
+                        d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31"
+                        transform="translate(311.08 476.02)"
+                        style="fill:none;stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:35px" />
+                </svg>
+                <p class="med"
+                    style="font-size: 15px; margin-top: 8px; color: #fff; margin-top: 8px; animation: fucker 4.3s;">
+                    Press to open</p>
+            </div>
+        </div>
         <!--Settings-->
+        <script>
+            function imsosilly() {
+                fesw('settingsmain', 'settingsuser');
+            }
+        </script>
         <div class="window" id="settings" name="Settings">
             <div class="content">
                 <p class="h2">Settings</p>
@@ -122,7 +113,7 @@
                 </div>
                 <div id="settingspriv" style="display: none;">
                     <p class="bold">Data & Privacy</p>
-                    <button class="b1" onclick="fesw('settingspriv', 'eraseareyousure');">Erase This Shuffler</button>
+                    <button class="b1" onclick="fesw('settingspriv', 'eraseareyousure')">Erase This Shuffler</button>
                     <p><button class="winb" onclick="fesw('settingspriv', 'settingsmain');">Back</button></p>
                 </div>
                 <div id="eraseareyousure" style="display: none;">
@@ -133,11 +124,10 @@
                 </div>
                 <div id="settingsgen" style="display: none;">
                     <p class="bold">General</p>
-                    <button class="b1 b2" onclick="fesw('settingsgen', 'settingsui');opapp('settings');">Change UI
+                    <button class="b1 b2" onclick="fesw('settingsgen', 'settingsui');">Change UI
                         settings</button>
                     <button class="b1 b2 guestno" onclick="fesw('settingsgen', 'settingslock');">Lock
                         timeout</button>
-                    <button class="b1 b2" onclick="reboot();">Reboot</button>
                     <p><button class="winb" onclick="fesw('settingsgen', 'settingsmain');">Back</button></p>
                 </div>
                 <div id="settingsui" style="display: none;">
@@ -197,6 +187,18 @@
                 <button class="b1" id="killsong">Stop</button><button id="loopbtn" class="b1">Loop: Off</button>
             </div>
         </div>
+        <div class="window" id="terminal" name="Terminal">
+            <div class="content" id="term">
+                <p>Don't paste anything here, this is only here for developers/tinkerers.</p>
+                <input class="i1" placeholder="Enter some JS here..." id="termi">
+            </div>
+            <div class="close">
+                <button class="b1" id="killsong"
+                    onclick="const te = document.getElementById('termi').value; eval(te); snack('Ran code', '1500');">Run</button><button onclick="hidef('terminal');" class="b1">Close</button><button
+                    class="b1" id="killsong" onclick="document.getElementById('termi').value = ``;"
+                    class="b1">Clear</button>
+            </div>
+        </div>
         <div class="window" id="about" name="About"
             style="width: 300px !important; height: auto !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%); right: unset !important; bottom: unset !important; border-radius: 12px; box-shadow: var(--wins); border: 2px solid var(--bordercolor);">
             <div class="content" style="padding: 8px;">
@@ -244,7 +246,7 @@
                     <input type="text" class="i1" id="search-bar" placeholder="Search songs...">
                     <p class="fucku" style="margin-bottom: 4px;"><button class="b1"
                             onclick="upload();">Upload</button><button class="b1" onclick="apps();">Apps</button><button
-                            id="cancel-btn" class="b1" style="margin-bottom: 1px;">Cancel search</button></p>
+                            id="cancel-btn" class="b1" style="margin-bottom: 1px;">Stop search</button></p>
                 </div>
                 <div id="files-list" style="margin-bottom: 180px;">
 
@@ -264,6 +266,16 @@
         </audio>
         <audio id="unlock">
             <source src="./assets/other/unlock.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <audio id="hSound">
+            <source src="./assets/other/h.mp3" type="audio/mpeg">
+            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
+            browser.
+        </audio>
+        <audio id="cSound">
+            <source src="./assets/other/c.mp3" type="audio/mpeg">
             Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
             browser.
         </audio>
@@ -296,6 +308,7 @@
             var accent = await readvar('accent');
             console.log(`<i> Starting stage 1 (originally 2).`);
             started = "full";
+            showcls('whar'); hidecls('whar2');
             const wd = await readvar('wd');
             const appear2 = await readvar('appear');
             const forcedata = await readvar('forcedata');
@@ -306,6 +319,11 @@
             const ws = await readpb('ws');
             if (ws === "f") {
                 cv('wins', 'none');
+            }
+            if (forcedata == "off") {
+                forcedatac = false;
+            } else {
+                forcedatac = true;
             }
             if (accent) {
                 changevar('accent', accent);

@@ -73,7 +73,6 @@ async function playaud(base64Content, contentType) {
                     img.src = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
                 }
                 base64String = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
-        
                 const e2 = gen(7);
                 const e5 = gen(7);
                 const e7 = gen(7);
@@ -91,9 +90,9 @@ async function playaud(base64Content, contentType) {
                     <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
                         <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
                         width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
-                        <p class="med" style="margin-top: 9px;">${wint}</p>
-                        <p class="med">${nm}</p>
-                        <p class="med"style="margin-bottom: 9px;">${alb} - ${yr}</p>
+                        <p class="med" onclick="snack('Song title/name', '2200');" style="margin-top: 9px;">${wint}</p>
+                        <p class="med" onclick="snack('Album and year', '2000');" style="margin-bottom: 9px;">${alb} - ${yr}</p>
+                        <p class="med" onclick="snack('Artist', '1600');">${nm}</p>
                         <div class="flex-container">
                             <div class="timeplayed" class="smt">0:00</div>
                             <div class="flex-bar">
@@ -109,8 +108,8 @@ async function playaud(base64Content, contentType) {
                             <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
                             width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
                             <p class="med">${wint}</p>
-                            <p class="med">${alb} - ${yr}</p>
                             <p class="med">${nm}</p>
+                            <p class="med">${alb} - ${yr}</p>
                             <div class="flex-container">
                             <div class="timeplayed" class="smt">0:00</div>
                             <div class="flex-bar">
@@ -120,6 +119,56 @@ async function playaud(base64Content, contentType) {
                         </div>
                             <p><img onclick="back();" id="${e8}" src="./assets/img/skip-back.svg" class="icon"></img><img id="${e2}" src="./assets/img/circle-pause.svg" class="icon"></img><img onclick="skip();" id="${e7}" src="./assets/img/skip-forward.svg" class="icon"></img></p>
                         </div>`;
+                }
+
+                if ("mediaSession" in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: tag.tags.title,
+                        artist: tag.tags.artist,
+                        album: tag.tags.album,
+                        artwork: [
+                            {
+                                src: base64String,
+                                sizes: "512x512",
+                                type: "image/png",
+                            },
+                        ],
+                    });
+                    navigator.mediaSession.setActionHandler("play", () => {
+                        audio.play();
+                    });
+                    navigator.mediaSession.setActionHandler("pause", () => {
+                        audio.pause();
+                    });
+                    navigator.mediaSession.setActionHandler("stop", () => {
+                        audio.pause();
+                        chacc(acce);
+                        URL.revokeObjectURL(blob);
+                        blob = null;
+                        isPaused = false;
+                        pauseBtn.src = './assets/img/circle-pause.svg';
+                        cv('covsc', '0.8');
+                        yay(); clapp('media');
+                    });
+                    navigator.mediaSession.setActionHandler("previoustrack", () => {
+                        audio.pause();
+                        back();
+                        URL.revokeObjectURL(blob);
+                        blob = null;
+                    });
+                    navigator.mediaSession.setActionHandler("nexttrack", () => {
+                        audio.pause();
+                        skip();
+                        URL.revokeObjectURL(blob);
+                        blob = null;
+                    });
+                    navigator.mediaSession.setActionHandler("seekto", (details) => {
+                        if (details.fastSeek && 'fastSeek' in audio) {
+                            audio.fastSeek(details.seekTime);
+                        } else {
+                            audio.currentTime = details.seekTime;
+                        }
+                    });
                 }
                 showf('media');
                 document.getElementById('media2').innerHTML = audPlayer;
@@ -228,55 +277,6 @@ async function playaud(base64Content, contentType) {
                     .catch(error => {
                         div.innerHTML = error;
                     });
-                  if ("mediaSession" in navigator) {
-                    navigator.mediaSession.metadata = new MediaMetadata({
-                        title: tag.tags.title,
-                        artist: tag.tags.artist,
-                        album: tag.tags.album,
-                        artwork: [
-                            {
-                                src: base64String,
-                                sizes: "512x512",
-                                type: "image/png",
-                            },
-                        ],
-                    });
-                    navigator.mediaSession.setActionHandler("play", () => {
-                        audio.play();
-                    });
-                    navigator.mediaSession.setActionHandler("pause", () => {
-                        audio.pause();
-                    });
-                    navigator.mediaSession.setActionHandler("stop", () => {
-                        audio.pause();
-                        chacc(acce);
-                        URL.revokeObjectURL(blob);
-                        blob = null;
-                        isPaused = false;
-                        pauseBtn.src = './assets/img/circle-pause.svg';
-                        cv('covsc', '0.8');
-                        yay(); clapp('media');
-                    });
-                    navigator.mediaSession.setActionHandler("previoustrack", () => {
-                        audio.pause();
-                        back();
-                        URL.revokeObjectURL(blob);
-                        blob = null;
-                    });
-                    navigator.mediaSession.setActionHandler("nexttrack", () => {
-                        audio.pause();
-                        skip();
-                        URL.revokeObjectURL(blob);
-                        blob = null;
-                    });
-                    navigator.mediaSession.setActionHandler("seekto", (details) => {
-                        if (details.fastSeek && 'fastSeek' in audio) {
-                            audio.fastSeek(details.seekTime);
-                        } else {
-                            audio.currentTime = details.seekTime;
-                        }
-                    });
-                }
             },
             onError: function (error) {
                 panic(error);

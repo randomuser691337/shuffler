@@ -38,5 +38,5 @@ async function holyshit() {
     }
 }
 function apps() {
-    cm(`<button class="b1 b2" onclick="showf('about');">About</button><button class="b1 b2" onclick="showf('settings');">Settings</button><button class="b1 b2 hide" onclick="showf('sender');">Sender</button><button class="b1 b2" onclick="showf('weather');">Weather</button><button style="margin-top: 2px;" class="b1">Close</button>`);
+    cm(`<button class="b1 b2" onclick="showf('about');">About</button><button class="b1 b2" onclick="showf('settings');">Settings</button><button class="b1 b2" onclick="showf('terminal');">Terminal</button><button class="b1 b2 hide" onclick="showf('sender');">Sender</button><button class="b1 b2" onclick="showf('weather');">Weather</button><button style="margin-top: 2px;" class="b1">Close</button>`);
 }

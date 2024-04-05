@@ -154,7 +154,7 @@ input:placeholder {
 .icon {
     background-color: transparent;
     margin: 1px;
-    transition: transform 0.04s, opacity 0.05s;
+    transition: transform 0.07s, opacity 0.07s;
     cursor: pointer;
     border: none !important;
     filter: var(--isat);
@@ -637,9 +637,15 @@ a:active {
     border: none;
     border-radius: 14px;
     max-width: 300px;
-    transition: 0.15s;
+    transition: 0.20s;
+    cursor: pointer;
     transform: scale(var(--covsc));
     opacity: var(--covsc);
+}
+
+.albumart:active,
+.albumart:focus-visible { 
+    transform: scale(0.85);
 }
 
 .light {

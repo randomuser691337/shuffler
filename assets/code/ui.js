@@ -216,6 +216,7 @@ async function setThemeColor(color) {
         document.head.appendChild(newMetaTag);
     }
 }
+
 async function appear(mode) {
     if (mode === "l") {
         await setThemeColor('#ffffff');

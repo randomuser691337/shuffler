@@ -1,7 +1,12 @@
-var valuesToCheck = [".jpg", ".png", ".svg", ".jpeg", ".webp", ".mp3", ".mp4", ".webm", '.wav', '.mpeg', '.gif'];
+var valuesToCheck = [".mp3", '.wav', '.mpeg', '.flac', '.ogg'];
 async function handleFileUpload(file) {
     try {
         showf('uploadwarn', 0);
+        if (!file.type.startsWith('audio/')) {
+            snack('Only music files are allowed!', '3500');
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = async () => {
             const fileName = 'locker_' + file.name;
@@ -12,8 +17,9 @@ async function handleFileUpload(file) {
         };
         reader.readAsDataURL(file);
     } catch (error) {
-        snack(`files error: ${error}`, '3500');
+        snack(`<!> Files error: ${error}`, '3500');
         console.log(error);
+        panic(error);
     }
 }
 
@@ -41,13 +47,16 @@ document.addEventListener('DOMContentLoaded', () => {
 function upload() {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'music/'; // Adjust file types as needed
+    input.accept = 'audio/*'; // Allow multiple music file types
+    input.multiple = true; // Enable multiple file selection
+
     input.onchange = async (event) => {
         const files = event.target.files;
         for (let i = 0; i < files.length; i++) {
             await handleFileUpload(files[i]);
         }
     };
+
     input.click();
 }
 
@@ -124,6 +133,7 @@ window.updatefilesList = async function () {
     request.onsuccess = async (event) => {
         const keys = event.target.result;
         if (keys.length === 0) {
+            showf('setupbg', 0);
             filesList.innerHTML = '<p>Nothing here yet. Select "<a onclick="upload();">Upload</a>" to add songs, maybe <a onclick="showf(`weather`);">set up the weather</a>, or go to <a onclick="showf(`settings`);">Settings</a> to personalize!</p>';
             return;
         }
@@ -230,7 +240,8 @@ window.updatefilesList = async function () {
     };
 
     request.onerror = (event) => {
-        console.error("[ERR] Error fetching files variables: " + event.target.errorCode);
+        console.error("<!> Error fetching files variables: " + event.target.errorCode);
+        panic(event.target.errorCode);
     };
 };
 async function renfiles(name, box) {

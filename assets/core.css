@@ -136,7 +136,7 @@ input:placeholder {
     color: var(--fontc);
     font-family: 'PoppinsM', Arial;
     margin: 1px;
-    transition: 0.1s;
+    transition: transform 0.04s, opacity 0.05s;
     cursor: pointer;
     border: 2px solid transparent;
 }
@@ -146,28 +146,32 @@ input:placeholder {
     background-color: rgba(var(--accent), 0.35);
 }
 
-.b1:active {
-    transform: scale(0.92);
+.b1:active,
+.b1:focus-visible { 
+    transform: scale(0.9);
 }
 
 .icon {
     background-color: transparent;
     margin: 1px;
-    transition: 0.05s;
+    transition: transform 0.04s, opacity 0.05s;
     cursor: pointer;
     border: none !important;
     filter: var(--isat);
     width: 62px;
     margin-top: 4px;
     height: 62px;
+    opacity: var(--covsc);
 }
 
 .icon:hover {
-    transform: scale(1.06);
+    transform: scale(1.08);
 }
 
-.icon:active {
-    transform: scale(0.8);
+.icon:active,
+.icon:focus-visible { 
+    transform: scale(0.9);
+    opacity: 0.7; 
 }
 
 input[type=range] {
@@ -230,8 +234,9 @@ input[type=range]::-moz-range-thumb {
     border: 1px solid rgba(var(--accent))
 }
 
-.winb:active {
-    transform: scale(0.88);
+.winb:active,
+.winb:focus-visible { 
+    transform: scale(0.85);
 }
 
 .i1 {
@@ -348,10 +353,9 @@ input[type=range]::-moz-range-thumb {
 
 .close {
     position: fixed;
-    left: 50%;
-    bottom: 2px;
-    transform: translate(-50%, -50%);
-    z-index: 3;
+    bottom: 22px;
+    left: 22px; right: 22px;
+    text-align: center !important;
 }
 
 .title-bar:active {
@@ -417,7 +421,7 @@ button:hover {
 
 @keyframes mainm {
     0% {
-        transform: scale(0.4);
+        transform: scale(0.6);
         opacity: 0%;
     }
 
@@ -615,6 +619,29 @@ a:active {
     color: var(--fontc2);
 }
 
+.lyrp {
+    display: inline-block;
+    opacity: 0;
+    width: 100%;
+    transform: translateX(-60%);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    box-sizing: border-box;
+}
+
+.albumart {
+    box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
+    width: 90%;
+    top: 4vw;
+    box-sizing: border-box;
+    height: auto;
+    border: none;
+    border-radius: 14px;
+    max-width: 300px;
+    transition: 0.15s;
+    transform: scale(var(--covsc));
+    opacity: var(--covsc);
+}
+
 .light {
     background-color: rgb(230, 230, 230, 1.0);
     color: #000;
@@ -657,12 +684,15 @@ a:active {
 
 .button-container {
     display: flex;
-    justify-content: space-between; /* Distribute items evenly */
+    justify-content: space-between;
+    /* Distribute items evenly */
 }
 
 .button-container button {
-    flex-grow: 1; /* Allow buttons to grow to fill space */
-    margin: 0 2px; /* Add spacing between buttons */
+    flex-grow: 1;
+    /* Allow buttons to grow to fill space */
+    margin: 0 2px;
+    /* Add spacing between buttons */
 }
 
 .progress-bar {
@@ -839,7 +869,7 @@ body {
     padding: 8px 10px;
     padding-bottom: 11px;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 

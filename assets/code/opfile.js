@@ -65,7 +65,7 @@ async function playaud(base64Content, contentType) {
         let blob = new Blob([arrayBuffer], { type: mimeType });
         jsmediatags.read(blob, {
             onSuccess: async function (tag) {
-                cv('covsc', '0.8');
+                cv('covsc', '0.75');
                 let base64String = "";
                 const audio = new Audio();
                 audio.src = URL.createObjectURL(blob);
@@ -121,8 +121,7 @@ async function playaud(base64Content, contentType) {
                 if (isMobileDevice()) {
                     var audPlayer = `
                     <div style="position: fixed; left: 12vw; right: 12vw; top: 16vw; z-index: 2; overflow-y: auto !important;">
-                        <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 3vw 3vw rgba(0, 0, 0, 0.25);
-                        width: 90%; top: 4vw; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
+                        <img src="${base64String}" class="albumart" onclick="showf('${lyrid}');lyrst();">
                         <p class="med" onclick="snack('Song title/name', '2200');" style="margin-top: 9px;">${wint}</p><p class="med" onclick="snack('Album and year', '2000');">${alb} - ${yr}</p><p class="med" style="margin-bottom: 9px;" onclick="snack('Artist', '1600');">${nm}</p>
                         <div class="flex-container">
                             <div class="timeplayed" class="smt">0:00</div>
@@ -136,8 +135,7 @@ async function playaud(base64Content, contentType) {
                 } else {
                     var audPlayer = `
                         <div style="margin-top: 20px;">
-                            <img src="${base64String}" style="box-shadow: -1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 1.5vw 0 1.5vw -1.5vw rgba(0, 0, 0, 0.25), 0 2vw 2vw rgba(0, 0, 0, 0.25);
-                            width: 200px; box-sizing: border-box; height: auto; border: none; border-radius: 14px; max-width: 300px; transition: 0.25s; transform: scale(var(--covsc));" onclick="showf('${lyrid}');">
+                            <img src="${base64String}" class="albumart" onclick="showf('${lyrid}');lyrst();">
                             <p class="med">${wint}</p>
                             <p class="med">${nm}</p>
                             <p class="med">${alb} - ${yr}</p>
@@ -178,7 +176,7 @@ async function playaud(base64Content, contentType) {
                         blob = null;
                         isPaused = false;
                         pauseBtn.src = './assets/img/circle-pause.svg';
-                        cv('covsc', '0.8');
+                        cv('covsc', '0.75');
                         yay(); clapp('media');
                     });
                     navigator.mediaSession.setActionHandler("previoustrack", () => {
@@ -219,7 +217,7 @@ async function playaud(base64Content, contentType) {
                         audio.pause();
                         isPaused = true;
                         pauseBtn.src = './assets/img/circle-play.svg';
-                        cv('covsc', '0.8');
+                        cv('covsc', '0.75');
                     } else {
                         audio.play();
                         isPaused = false;
@@ -235,19 +233,19 @@ async function playaud(base64Content, contentType) {
                     blob = null;
                     isPaused = false;
                     pauseBtn.src = './assets/img/circle-pause.svg';
-                    cv('covsc', '0.8');
+                    cv('covsc', '0.75');
                     yay(); clapp('media');
                 });
 
                 skipBtn.addEventListener('click', function () {
-                    cv('covsc', '0.8');
+                    cv('covsc', '0.75');
                     audio.pause();
                     URL.revokeObjectURL(blob);
                     blob = null;
                 });
 
                 backBtn.addEventListener('click', function () {
-                    cv('covsc', '0.8');
+                    cv('covsc', '0.75');
                     audio.pause();
                     URL.revokeObjectURL(blob);
                     blob = null;
@@ -256,7 +254,7 @@ async function playaud(base64Content, contentType) {
                 audio.addEventListener('pause', function () {
                     isPaused = true;
                     pauseBtn.src = './assets/img/circle-play.svg';
-                    cv('covsc', '0.8');
+                    cv('covsc', '0.75');
                 });
                 audio.addEventListener('play', function () {
                     isPaused = false;
@@ -299,15 +297,19 @@ async function playaud(base64Content, contentType) {
                     audio.loop = loopEnabled;
                     loopBtn.textContent = `Loop: ${loopEnabled ? 'On' : 'Off'}`;
                 });
-                await searchLyrics(tag.tags.title, tag.tags.artist)
-                    .then(lyrics => {
-                        const withoutFirstLine = lyrics.split('\n').slice(1).join('\n');
-                        const sanitizedText = withoutFirstLine.replace(/\n/g, '</p><p>');
-                        div.innerHTML = sanitizedText;
-                    })
-                    .catch(error => {
-                        div.innerHTML = error;
-                    });
+                try {
+                    const lyrics = await searchLyrics(tag.tags.title, tag.tags.artist);
+                    const lyricsWithoutFirstLine = lyrics.split('\n').slice(1).join('\n');
+                    const filteredLyrics = lyricsWithoutFirstLine
+                        .split('\n')
+                        .filter(line => line.trim() !== '');
+                    const paragraphs = filteredLyrics.map(line => `<p class="lyrp">${line}</p>`);
+                    const sanitizedText = paragraphs.join('\n');
+                    div.innerHTML = sanitizedText;
+                } catch (error) {
+                    div.innerHTML = error.message || 'An error occurred while fetching lyrics.';
+                    panic(error);
+                }
             },
             onError: function (error) {
                 panic(error);

@@ -45,6 +45,20 @@ function scrounge() {
 
 scrounge();
 
+function lyrst() {
+    const links = document.querySelectorAll('.lyrp');
+    setTimeout(function () {
+        links.forEach((link, index) => {
+            setTimeout(() => {
+                link.style.opacity = '0';
+                link.style.transform = 'translateX(-60%)';
+                link.style.opacity = '1';
+                link.style.transform = 'translateX(0)';
+            }, 70 * index);
+        });
+    }, 70)
+}
+
 function chacc2(ye) {
     const ye2 = document.getElementById(ye).value;
     chacc(ye2);

@@ -80,6 +80,14 @@ async function cacheAllSongs() {
 
 let playedSongs = [];
 
+function shuffle() {
+    if (cachedSongs.length > 0) {
+        const randomIndex = Math.floor(Math.random() * cachedSongs.length);
+        const { key, fileName } = cachedSongs[randomIndex];
+        readAndPlaySong(key, fileName);
+    }
+}
+
 function skip() {
     if (cachedSongs.length > 0) {
         currentSongIndex = (currentSongIndex + 1) % cachedSongs.length;

@@ -19,6 +19,7 @@ function scrounge() {
     };
 
     const filterFiles = () => {
+        showcls('searchchip'); hidecls('appbtns');
         const searchText = searchBar.value.trim().toLowerCase();
         updateFilesArray();
 
@@ -36,6 +37,7 @@ function scrounge() {
     cancelBtn.addEventListener('click', () => {
         searchBar.value = '';
         filterFiles();
+        showcls('appbtns'); hidecls('searchchip');
     });
 
     updateFilesArray();

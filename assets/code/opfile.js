@@ -6,6 +6,39 @@ async function isMobileDevice() {
         return true;
     }
 }
+async function getsname(base64Content, contentType) {
+    try {
+        const binaryContent = atob(base64Content.split(',')[1]);
+        let mimeType;
+        switch (contentType) {
+            case '.mpeg':
+            case '.mp3':
+                mimeType = 'audio/mpeg';
+                break;
+            case '.wav':
+                mimeType = 'audio/wav';
+                break;
+            default:
+                return undefined;
+        }
+
+        const blob = new Blob([new ArrayBuffer(binaryContent.length)], { type: mimeType });
+        return await new Promise((resolve, reject) => {
+            jsmediatags.read(blob, {
+                onSuccess: function (tag) {
+                    if (tag && tag.tags && tag.tags.title) {
+                        resolve(tag.tags.title);
+                    } else {
+                        reject(undefined);
+                    }
+                },
+                onError: undefined,
+            });
+        });
+    } catch (error) {
+        return undefined;
+    }
+}
 async function playaud(base64Content, contentType) {
     try {
         const acce = await readvar('accent');

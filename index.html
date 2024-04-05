@@ -9,12 +9,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Shuffler">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#1a1a1a">
     <meta charset="UTF-8">
     <link rel="apple-touch-icon" href="./assets/img/noround.png">
     <script>
-        var ver = "0.1.1";
-        var lastedit = "Apr 4, 2024";
+        var ver = "0.1.2";
+        var lastedit = "Apr 5, 2024";
         var crashed = false;
         var mostrecerr = "No history."
         var forcedatac = true;
@@ -34,7 +34,6 @@
 %c > ^ <  randomuser691337`, 'color: orange', 'color: orange', 'color: orange');
 
         console.log(`<!> Do not paste anything here, as doing so may allow anyone full access to this Shuffler.`);
-        console.log(`<!> Yes, it's based on WebDesk. Stop messaging me about it.`)
     </script>
 </head>
 
@@ -244,9 +243,10 @@
                         weather
                     </p>
                     <input type="text" class="i1" id="search-bar" placeholder="Search songs...">
-                    <p class="fucku" style="margin-bottom: 4px;"><button class="b1"
-                            onclick="upload();">Upload</button><button class="b1" onclick="apps();">Apps</button><button
-                            id="cancel-btn" class="b1" style="margin-bottom: 1px;">Stop search</button></p>
+                    <p class="fucku" style="margin-bottom: 4px;"><button class="b1 appbtns" onclick="apps();">Apps</button><button class="b1 appbtns"
+                            onclick="upload();">Upload</button><button
+                            id="cancel-btn" class="b1 searchchip hide b2" style="margin-bottom: 1px; margin-top: 1px;">Cancel Search</button><button
+                            onclick="shuffle();" class="b1 appbtns" style="margin-bottom: 1px;">Shuffle</button></p>
                 </div>
                 <div id="files-list" style="margin-bottom: 180px;">
 

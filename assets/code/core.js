@@ -46,7 +46,7 @@ function scrounge() {
 scrounge();
 
 function lyrst() {
-    const links = document.querySelectorAll('.lyrp');
+    /* const links = document.querySelectorAll('.lyrp');
     setTimeout(function () {
         links.forEach((link, index) => {
             setTimeout(() => {
@@ -56,7 +56,8 @@ function lyrst() {
                 link.style.transform = 'translateX(0)';
             }, 70 * index);
         });
-    }, 70)
+    }, 70) */
+    // fuck this (for now)
 }
 
 function chacc2(ye) {

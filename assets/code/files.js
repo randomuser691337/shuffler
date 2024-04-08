@@ -141,6 +141,7 @@ window.updatefilesList = async function () {
             if (key.startsWith('locker_')) {
                 const found = valuesToCheck.find(value => key.includes(value));
                 if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
+                    
                 } else {
                     delvar(key);
                     window.updatefilesList();

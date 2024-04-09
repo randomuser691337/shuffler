@@ -90,9 +90,10 @@ async function playaud(base64Content, contentType) {
                         albumImg = tag.tags.picture;
                     }
                 }
-
                 if (albumImg) {
+                    var lol = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
                     const img = new Image();
+                    img.src = lol;
                     img.onload = function () {
                         const canvas = document.createElement('canvas');
                         const context = canvas.getContext('2d');
@@ -103,9 +104,8 @@ async function playaud(base64Content, contentType) {
                         const colors = sampleColors(imageData);
                         changevar('accent', colors[0], true);
                     };
-                    img.src = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
                 }
-                base64String = "data:image/jpeg;base64," + arrayBufferToBase64(albumImg.data);
+                base64String = lol;
                 const e2 = gen(7);
                 const e5 = gen(7);
                 const e7 = gen(7);

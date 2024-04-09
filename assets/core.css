@@ -640,7 +640,7 @@ a:active {
     border: none;
     border-radius: 14px;
     max-width: 300px;
-    transition: 0.20s;
+    transition: 0.25s;
     cursor: pointer;
     transform: scale(var(--covsc));
     opacity: var(--covsc);
@@ -850,7 +850,7 @@ body {
     stroke-linecap: round;
     stroke-dasharray: 60px;
     stroke-dashoffset: 60px;
-    animation: ian2 3s forwards;
+    animation: ian2 1.2s forwards;
 }
 
 @keyframes ian2 {

@@ -2,13 +2,13 @@
 <html>
 
 <head>
-    <title>WebDesk (Erase)</title>
+    <title>Shuffler (Erase)</title>
     <link rel="shortcut icon" href="./assets/img/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="./assets/core.css">
     <script>
-        var ver = "0.0.1";
-        var lastedit = "Mar 3, 2024";
+        var ver = "0.0.2";
+        var lastedit = "Apr 21, 2024";
         var crashed = false;
         var mostrecerr = "No history."
         var forcedatac = true;
@@ -38,39 +38,32 @@
 
         console.log(`<!> Do not paste anything here, as doing so may allow anyone full access to this WebDesk.`);
     </script>
+    <style>
+        .fullbg {
+            color: #fff !important;
+            padding: 32px !important;
+        }
+        button {
+            color: #fff !important;
+        }
+    </style>
 </head>
 
 <body>
     <div class="fullbg" id="nest">
-        <div id="setup" class="window" style="width: 350px; display: block !important;">
-            <div class="title-bar">Erase Assistant <button class="winb" onclick="mkw(`<p>Erase Assistant <span class='med'>${ver}</span></p><p>Last edited <span class='med'>${lastedit}</span></p>`, 'About');">About</button></div>
-            <div class="content">
-                <div id="setup1">
-                    <p>Erase Assistant is an emergency tool to erase WebDesk installs that are too damaged to erase normally.</p>
-                    <p>Click "Erase" to erase or "Exit" to stop.</p>
-                    <button class="b1" onclick='window.location = "./index.html";'>Exit</button><button class="b1" onclick="burnitall();">Erase</button>
-                </div>
-            </div>
-        </div>
-        <audio id="hSound">
-            <source src="./assets/other/h.mp3" type="audio/mpeg">
-            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
-            browser.
-        </audio>
-        <audio id="cSound">
-            <source src="./assets/other/c.mp3" type="audio/mpeg">
-            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
-            browser.
-        </audio>
+        <p>Erase Assistant is an emergency tool to erase WebDesk installs that are too damaged to erase normally.</p>
+        <p>Click "Erase" to erase or "Exit" to stop.</p>
+        <button class="b1" onclick='window.location = "./index.html";'>Exit</button><button class="b1"
+            onclick="burnitall();">Erase</button>
     </div>
     <script src="./assets/code/jq.js"></script>
     <script src="./assets/code/core.js"></script>
     <script src="./assets/code/ui.js"></script>
     <script>
         centerel('setup');
-        const DB_NAME = "WebDeskStore";
-        const STORE_NAME = "WebDeskDB";
-        let NTName = "database"; 
+        const DB_NAME = "ShufflerStore";
+        const STORE_NAME = "ShufflerDB";
+        let NTName = "database";
         let dbPromise = null;
         var pass = "def"
         function initDB() {

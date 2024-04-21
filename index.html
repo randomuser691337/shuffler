@@ -12,8 +12,8 @@
     <meta name="theme-color" content="#000000">
     <meta charset="UTF-8">
     <script>
-        var ver = "0.1.4";
-        var lastedit = "Apr 9, 2024";
+        var ver = "0.1.5";
+        var lastedit = "Apr 21, 2024";
         var crashed = false;
         var mostrecerr = "No history."
         var forcedatac = true;
@@ -178,7 +178,7 @@
             </div>
         </div>
         <div class="window" id="media" name="Media">
-            <div class="content" id="media2"></div>
+            <div class="content" id="media2" style="opacity: var(--covsc); transition: opacity 0.2s;"></div>
             <div class="close">
                 <button class="b1" id="killsong">Stop</button><button id="loopbtn" class="b1">Loop: Off</button>
             </div>
@@ -196,7 +196,7 @@
             </div>
         </div>
         <div class="window" id="about" name="About"
-            style="width: 300px !important; height: auto !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%); right: unset !important; bottom: unset !important; border-radius: 12px; box-shadow: var(--wins); border: 2px solid var(--bordercolor);">
+            style="width: 300px !important; height: auto !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%); right: unset !important; bottom: unset !important; border-radius: 14px; box-shadow: var(--wins); border: 2px solid var(--bordercolor);">
             <div class="content" style="padding: 8px;">
                 <div class="container" id="about1">
                     <div class="logo">
@@ -218,13 +218,11 @@
         </div>
         <div id="sender" class="window resizeh" style="display: none;" name="Sender">
             <div class="content" id="sending">
-                <p class="med">Sending song</p>
-                <p>Sending song: <span class="sendsong med"></span></p>
+                <p class="h2">Send Song</p>
+                <p>You're sending <span class="sendsong med"></span>.</p>
+                <p class="smt">Please note: You need to be on the same Wi-Fi as the person you're sending to.</p>
                 <input type="text" id="peerIdInput" placeholder="Enter Peer ID" class="i1">
-                <button id="connectButton" onclick="senda(sblob, sname);">Connect</button>
-                <p class="med">Recieving song</p>
-                <p>Enter this code on the other end:</p>
-                <p class="med mcode">Loading...</p>
+                <button onclick="sendf(document.getElementById('peerIdInput').value);" class="b1">Send!</button>
             </div>
             <div class="close">
                 <button class="b1" onclick="hidef('sender');">Close</button>
@@ -235,10 +233,7 @@
             <div class="content" style="overflow: auto !important;">
                 <div style="position: sticky;">
                     <p class="h2">Shuffler</p>
-                    <p class="smt weather" style="margin-bottom: 10px !important;" onclick="showf('weather');">Select to
-                        set up
-                        weather
-                    </p>
+                    <p class="smt" style="margin-bottom: 10px !important;" onclick="showf('weather');"><span class="weather">Select to set up weather</span> - <span>song ID is <span class="mcode med">----</span></span></p>
                     <input type="text" class="i1" id="search-bar" placeholder="Search songs...">
                     <p class="fucku" style="margin-bottom: 4px;"><button class="b1 appbtns"
                             onclick="apps();">Apps</button><button class="b1 appbtns"
@@ -253,7 +248,7 @@
         </div>
         <div id="uploadwarn"
             style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 12px; background-color: var(--lightdarkb); padding: 10px; display: none; z-index: 9995;">
-            <p>Files are being uploaded, please wait.</p>
+            <p>Songs are being added, please wait.</p>
             <p>Do not reload!</p>
         </div>
         <div class="fullbg hide" style="background-color: var(--lightdark); z-index: 9998;"></div>
@@ -264,16 +259,6 @@
         </audio>
         <audio id="unlock">
             <source src="./assets/other/unlock.mp3" type="audio/mpeg">
-            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
-            browser.
-        </audio>
-        <audio id="hSound">
-            <source src="./assets/other/h.mp3" type="audio/mpeg">
-            Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
-            browser.
-        </audio>
-        <audio id="cSound">
-            <source src="./assets/other/c.mp3" type="audio/mpeg">
             Your browser does not support the audio element, if you're actually seeing this PLEASE use a different
             browser.
         </audio>

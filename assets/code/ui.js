@@ -19,28 +19,6 @@ function wal(content, btn1, n) {
     document.getElementById('nest').appendChild(windowContainer);
 }
 
-function opapp(d1) {
-    const dr1 = document.getElementById(d1);
-    const name = dr1.getAttribute("name");
-    const fucker = document.createElement('button');
-    const nid = `${d1}cb`;
-    const check = document.getElementById(nid);
-    if (check) {
-        console.log(`<!> WOAHHHH that alr exists nvm`);
-        fucker.remove();
-    } else {
-        fucker.id = nid;
-        fucker.className = "mainbtn n";
-        fucker.innerText = name;
-        fucker.onclick = function () {
-            opapp(d1);
-        }
-        const one = document.getElementById('appspace');
-        one.appendChild(fucker);
-    }
-    $(dr1).fadeIn(150); centerel(d1);
-    hidef('mainmenu');
-}
 function clapp(d1, destr) {
     if (destr) {
         dest(d1);

@@ -63,6 +63,7 @@ async function writevar(varName, value, op) {
         objectStore.put({ name: varName, value: value2 });
 
         transaction.oncomplete = function () {
+            hidef('uploadwarn', 0);
             if (op == "r") {
                 reboot();
             }

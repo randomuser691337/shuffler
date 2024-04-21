@@ -13,7 +13,6 @@ async function handleFileUpload(file) {
             const content = reader.result;
             await writevar(fileName, content);
             window.updatefilesList();
-            hidef('uploadwarn', 0);
         };
         reader.readAsDataURL(file);
     } catch (error) {
@@ -141,101 +140,104 @@ window.updatefilesList = async function () {
             if (key.startsWith('locker_')) {
                 const found = valuesToCheck.find(value => key.includes(value));
                 if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
-                    
+                    const fileName = key.slice(7);
+                    const listItem = document.createElement('div');
+                    listItem.className = "list";
+
+                    const nameCont = document.createElement('span');
+                    nameCont.className = "namecont";
+                    nameCont.innerHTML = fileName;
+                    nameCont.addEventListener('click', async () => {
+                        const content = await readvar(key);
+                        playaud(content, found);
+                        hidef('about');
+                    });
+                    const dropdownContainer = document.createElement('div');
+                    dropdownContainer.className = "dropdown";
+
+                    const dropdownButton = document.createElement('button');
+                    dropdownButton.textContent = "More";
+                    dropdownButton.className = "dropbtn winb";
+
+                    const dropdownContent = document.createElement('div');
+                    dropdownContent.className = "dropdown-content";
+
+                    const playBtn = document.createElement('button');
+                    playBtn.textContent = "Play";
+                    playBtn.classList = "b1 b2";
+                    playBtn.addEventListener('click', async () => {
+                        const content = await readvar(key);
+                        const found = valuesToCheck.find(value => key.includes(value));
+                        if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
+                            playaud(content, found);
+                            hidef('about');
+                        } else {
+                            delvar(key);
+                            window.updatefilesList();
+                            snack('Shuffler only supports .mp3, .wav, and .mpeg right now.', '4000');
+                        }
+                    });
+
+                    const grabBtn = document.createElement('button');
+                    grabBtn.textContent = "Grab";
+                    grabBtn.classList = "b1 b2";
+                    grabBtn.addEventListener('click', async () => {
+                        const content = await readvar(key);
+                        const a = document.createElement('a');
+                        a.href = content;
+                        a.download = fileName;
+                        a.click();
+                        snack('Started file download!', '2500');
+                    });
+
+                    const upBtn = document.createElement('button');
+                    upBtn.textContent = "Send";
+                    upBtn.classList = "b1 b2";
+                    upBtn.addEventListener('click', async () => {
+                        try {
+                            const fileData = await readvar(key);
+                            masschange('sendsong', fileName);
+                            sblob = fileData;
+                            sname = key;
+                            showf('sender');
+                        } catch (error) {
+                            console.error('Error reading file:', error);
+                        }
+                    });                                 
+
+                    const renBtn = document.createElement('button');
+                    renBtn.textContent = "Rename";
+                    renBtn.classList = "b1 b2";
+                    renBtn.addEventListener('click', () => {
+                        const boxId = gen(7);
+                        const win = `<p>Renaming <span class="med">${fileName}</span></p><p>Enter a name that isn't already used, or else this file will overwrite the other file.</p>
+                        <input class="i1" id="${boxId}" placeholder="Name here"/>`;
+                        wal(win, `renfiles('${key}', '${boxId}');`, 'Rename');
+                    });
+
+                    const delBtn = document.createElement('button');
+                    delBtn.textContent = "Delete";
+                    delBtn.classList = "b1 b2";
+                    delBtn.addEventListener('click', () => {
+                        listItem.parentNode.removeChild(listItem);
+                        delvar(key);
+                        snack('Deleted file successfully!', '2500');
+                    });
+
+                    dropdownContent.appendChild(playBtn);
+                    dropdownContent.appendChild(upBtn);
+                    dropdownContent.appendChild(grabBtn);
+                    dropdownContent.appendChild(renBtn);
+                    dropdownContent.appendChild(delBtn);
+                    dropdownContainer.appendChild(dropdownButton);
+                    dropdownContainer.appendChild(dropdownContent);
+                    listItem.appendChild(dropdownContainer);
+                    listItem.appendChild(nameCont);
+                    filesList.appendChild(listItem);
                 } else {
                     delvar(key);
                     window.updatefilesList();
                 }
-                const fileName = key.slice(7);
-                const listItem = document.createElement('div');
-                listItem.className = "list";
-
-                const nameCont = document.createElement('span');
-                nameCont.className = "namecont";
-                nameCont.innerHTML = fileName;
-                nameCont.addEventListener('click', async () => {
-                    const content = await readvar(key);
-                    playaud(content, found);
-                    hidef('about');
-                });
-                const dropdownContainer = document.createElement('div');
-                dropdownContainer.className = "dropdown";
-
-                const dropdownButton = document.createElement('button');
-                dropdownButton.textContent = "More";
-                dropdownButton.className = "dropbtn winb";
-
-                const dropdownContent = document.createElement('div');
-                dropdownContent.className = "dropdown-content";
-
-                const playBtn = document.createElement('button');
-                playBtn.textContent = "Play";
-                playBtn.classList = "b1 b2";
-                playBtn.addEventListener('click', async () => {
-                    const content = await readvar(key);
-                    const found = valuesToCheck.find(value => key.includes(value));
-                    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
-                        playaud(content, found);
-                        hidef('about');
-                    } else {
-                        delvar(key);
-                        window.updatefilesList();
-                        snack('Shuffler only supports .mp3, .wav, and .mpeg right now.', '4000');
-                    }
-                });
-
-                const grabBtn = document.createElement('button');
-                grabBtn.textContent = "Grab";
-                grabBtn.classList = "b1 b2";
-                grabBtn.addEventListener('click', async () => {
-                    const content = await readvar(key);
-                    const a = document.createElement('a');
-                    a.href = content;
-                    a.download = fileName;
-                    a.click();
-                    snack('Started file download!', '2500');
-                });
-
-                const upBtn = document.createElement('button');
-                upBtn.textContent = "Send";
-                upBtn.classList = "b1 b2 hide";
-                upBtn.addEventListener('click', async () => {
-                    const content = await readvar(key);
-                    sblob = content;
-                    sname = key;
-                    showf('sender');
-                });
-
-
-                const renBtn = document.createElement('button');
-                renBtn.textContent = "Rename";
-                renBtn.classList = "b1 b2";
-                renBtn.addEventListener('click', () => {
-                    const boxId = gen(7);
-                    const win = `<p>Renaming <span class="med">${fileName}</span></p><p>Enter a name that isn't already used, or else this file will overwrite the other file.</p>
-                    <input class="i1" id="${boxId}" placeholder="Name here"/>`;
-                    wal(win, `renfiles('${key}', '${boxId}');`, 'Rename');
-                });
-
-                const delBtn = document.createElement('button');
-                delBtn.textContent = "Delete";
-                delBtn.classList = "b1 b2";
-                delBtn.addEventListener('click', () => {
-                    listItem.parentNode.removeChild(listItem);
-                    delvar(key);
-                    snack('Deleted file successfully!', '2500');
-                });
-
-                dropdownContent.appendChild(playBtn);
-                dropdownContent.appendChild(upBtn);
-                dropdownContent.appendChild(grabBtn);
-                dropdownContent.appendChild(renBtn);
-                dropdownContent.appendChild(delBtn);
-                dropdownContainer.appendChild(dropdownButton);
-                dropdownContainer.appendChild(dropdownContent);
-                listItem.appendChild(dropdownContainer);
-                listItem.appendChild(nameCont);
-                filesList.appendChild(listItem);
             }
         });
     };

@@ -74,7 +74,7 @@ async function cacheAllSongs() {
             if (key.startsWith('locker_')) {
                 const fileName = key.slice(7);
                 let found = valuesToCheck.find(value => key.includes(value));
-                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".flac" || found === ".ogg") {
+                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".flac" || found === ".ogg" || found === ".m4a") {
                     cachedSongs.push({ key, fileName });
                 }
             }

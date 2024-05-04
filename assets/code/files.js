@@ -1,4 +1,4 @@
-var valuesToCheck = [".mp3", '.wav', '.mpeg', '.flac', '.ogg'];
+var valuesToCheck = [".mp3", '.wav', '.mpeg', '.flac', '.ogg', '.m4a'];
 async function handleFileUpload(file) {
     try {
         showf('uploadwarn', 0);
@@ -116,7 +116,7 @@ async function readAndPlaySong(key, fileName) {
     const content = await readvar(key);
     let found = valuesToCheck.find(value => key.includes(value));
     found = found.toLowerCase();
-    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
+    if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac" || found === ".m4a") {
         playaud(content, found, fileName);
     }
 }
@@ -139,7 +139,7 @@ window.updatefilesList = async function () {
         keys.forEach(key => {
             if (key.startsWith('locker_')) {
                 const found = valuesToCheck.find(value => key.includes(value));
-                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
+                if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac" || found === ".m4a") {
                     const fileName = key.slice(7);
                     const listItem = document.createElement('div');
                     listItem.className = "list";
@@ -168,13 +168,13 @@ window.updatefilesList = async function () {
                     playBtn.addEventListener('click', async () => {
                         const content = await readvar(key);
                         const found = valuesToCheck.find(value => key.includes(value));
-                        if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac") {
+                        if (found === ".mp3" || found === ".wav" || found === ".mpeg" || found === ".ogg" || found === ".flac" || found === ".m4a") {
                             playaud(content, found);
                             hidef('about');
                         } else {
                             delvar(key);
                             window.updatefilesList();
-                            snack('Shuffler only supports .mp3, .wav, and .mpeg right now.', '4000');
+                            snack('Shuffler only supports .mp3, .wav, .m4a, and .mpeg right now.', '4000');
                         }
                     });
 

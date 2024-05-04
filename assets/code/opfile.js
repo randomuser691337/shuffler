@@ -59,7 +59,7 @@ async function playaud(base64Content, contentType) {
                 mimeType = 'audio/wav';
                 break;
             default:
-                throw new Error('Unsupported audio format');
+                mimeType = 'audio/mpeg';
         }
 
         let blob = new Blob([arrayBuffer], { type: mimeType });

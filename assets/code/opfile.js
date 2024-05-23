@@ -299,7 +299,7 @@ async function playaud(base64Content, contentType) {
                 });
                 try {
                     const lyrics = await searchLyrics(tag.tags.title, tag.tags.artist);
-                    const lyricsWithoutFirstLine = lyrics.split('\n').slice(1).join('\n');
+                    const lyricsWithoutFirstLine = lyrics;
                     const filteredLyrics = lyricsWithoutFirstLine
                         .split('\n')
                         .filter(line => line.trim() !== '');

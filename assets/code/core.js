@@ -225,38 +225,42 @@ function adjustColorComponent(component) {
     const adjustment = Math.round(255 * percentage);
     if (component === 0) {
         return Math.min(255, component + adjustment);
-    }
-    else if (component === 255) {
+    } else if (component === 255) {
         return Math.max(0, component - adjustment);
-    }
-    else {
+    } else {
         return component;
     }
 }
 
 function isBlackOrWhite(r, g, b) {
-    return (r < 90 && g < 90 && b < 90) ||
-        (r > 90 && g > 90 && b > 90);
+    return (r < 90 && g < 90 && b < 90) || (r > 165 && g > 165 && b > 165);
 }
 
 function sampleColors(imageData) {
     const pixels = imageData.data;
-    const middleWidth = imageData.width - 8;
-    const middleHeight = imageData.height - 8;
-    const pixelCount = middleWidth * middleHeight;
-
+    const width = imageData.width;
+    const height = imageData.height;
     const colorCounts = {};
-    for (let i = 0; i < pixelCount; i++) {
-        const r = adjustColorComponent(pixels[i * 4]);
-        const g = adjustColorComponent(pixels[i * 4 + 1]);
-        const b = adjustColorComponent(pixels[i * 4 + 2]);
-        if (!isBlackOrWhite(r, g, b)) {
-            const color = `${r},${g},${b}`;
-            colorCounts[color] = (colorCounts[color] || 0) + 1;
+
+    for (let y = 4; y < height - 4; y++) {
+        for (let x = 4; x < width - 4; x++) {
+            const index = (y * width + x) * 4;
+            const r = adjustColorComponent(pixels[index]);
+            const g = adjustColorComponent(pixels[index + 1]);
+            const b = adjustColorComponent(pixels[index + 2]);
+
+            if (!isBlackOrWhite(r, g, b)) {
+                const color = `${r},${g},${b}`;
+                colorCounts[color] = (colorCounts[color] || 0) + 1;
+            }
         }
     }
-    const sortedColors = Object.keys(colorCounts).sort((a, b) => colorCounts[b] - colorCounts[a]);
-    return sortedColors.map(color => color.split(',').map(Number));
+
+    const sortedColors = Object.entries(colorCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(entry => entry[0].split(',').map(Number));
+
+    return sortedColors;
 }
 
 async function send(cont) {

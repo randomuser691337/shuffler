@@ -3,13 +3,11 @@ const OFFLINE_URL = 'index.html';
 
 const FILES_TO_CACHE = [
     OFFLINE_URL,
-    'assets/fs.js',
     'assets/style.css',
     'assets/lib/tagger.js',
     'assets/code/core.js',
     'assets/apps/weather.js',
     'assets/apps/loosecode.js',
-    'assets/wfs.js',
     'assets/code/color.js',
     'assets/code/files.js',
     'assets/code/idb.js',

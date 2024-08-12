@@ -4,8 +4,6 @@ const OFFLINE_URL = 'index.html';
 const FILES_TO_CACHE = [
     OFFLINE_URL,
     'assets/fs.js',
-    'assets/Roboto-Bold.ttf',
-    'assets/Roboto-Medium.ttf',
     'assets/style.css',
     'assets/lib/tagger.js',
     'assets/code/core.js',
